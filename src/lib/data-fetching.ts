@@ -1,8 +1,13 @@
 import axios from "axios";
 
+const baseUrl =
+  process.env.NODE_ENV === "development"
+    ? "http://localhost:3000"
+    : process.env.NEXT_PUBLIC_API_BASE_URL;
+
 export async function getInformation() {
   try {
-    const response = await axios.get(`http:/localhost:3000/api/information`);
+    const response = await axios.get(`${baseUrl}/api/information`);
     return response.data.information;
   } catch (error) {
     console.error("Error fetching information:", error);
@@ -12,7 +17,7 @@ export async function getInformation() {
 
 export async function getServices() {
   try {
-    const response = await axios.get(`http:/localhost:3000/api/services`);
+    const response = await axios.get(`${baseUrl}/api/services`);
     return response.data;
   } catch (error) {
     console.error("Error fetching services:", error);
@@ -20,10 +25,9 @@ export async function getServices() {
   }
 }
 
-
 export async function getSkills() {
   try {
-    const response = await axios.get(`http:/localhost:3000/api/skills`);
+    const response = await axios.get(`${baseUrl}/api/skills`);
     return response.data;
   } catch (error) {
     console.error("Error fetching skills:", error);
@@ -33,7 +37,7 @@ export async function getSkills() {
 
 export async function getExperience() {
   try {
-    const response = await axios.get(`http:/localhost:3000/api/experience`);
+    const response = await axios.get(`${baseUrl}/api/experience`);
     return {
       workingExperience: response.data.workingExperience || [],
       educationExperience: response.data.educationExperience || [],
@@ -46,7 +50,7 @@ export async function getExperience() {
 
 export async function getBlogs() {
   try {
-    const response = await axios.get(`http:/localhost:3000/api/blogs`);
+    const response = await axios.get(`${baseUrl}/api/blogs`);
     return response.data;
   } catch (error) {
     console.error("Error fetching blogs:", error);
