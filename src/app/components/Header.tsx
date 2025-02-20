@@ -1,60 +1,99 @@
-import Link from "next/link";
-import Image from "next/image";
-import NavigationToggle from "./NavigationToggle";
+"use client";
+import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
+import LightModeToggle from "@/app/components/LightModeToggle";
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faBars, faClose } from '@fortawesome/free-solid-svg-icons';
+library.add(faBars, faClose);
 
-interface Information {
-  brandImage: string;
-}
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { usePathname } from 'next/navigation';
 
-async function fetchInformation(): Promise<Information> {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/information`, {
-    cache: "no-store",
-  });
-  if (!res.ok) {
-    throw new Error("Failed to fetch information");
-  }
-  return res.json();
-}
+function Header({lightMode}:  any) {
+  const [information, setInformation] = useState<{brandImage: string}>({brandImage : ''});
+  const [navigationToggle, setNavigationToggle] = useState(false);
+  const pathname = usePathname();
 
-export default async function Header() {
-  const information = await fetchInformation();
+  const handleNavigationToggler = () => {
+    setNavigationToggle(!navigationToggle);
+  };
+
+  useEffect(() => {
+    fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/information`)
+      .then((response) => response.json())
+      .then((data) => setInformation(data));
+  }, []);
+
+  useEffect(() => {
+    console.log('router change')
+    setNavigationToggle(false);
+  }, [pathname]);
 
   return (
-    // <nav className={navigationToggler ? "mi-header Is-visible" : "mi-header"}>
-    <nav className="mi-header Is-visible">
-      <NavigationToggle />
+    <nav className={navigationToggle ? 'mi-header is-visible' : 'mi-header'}>
+      <button
+        onClick={handleNavigationToggler}
+        className="mi-header-toggler"
+      >
+        {!navigationToggle ? (
+          <FontAwesomeIcon icon="bars" />
+        ) : (
+          <FontAwesomeIcon icon="close" />
+        )}
+      </button>
       <div className="mi-header-inner">
         <div className="mi-header-image">
+          {information.brandImage.length > 0 &&
           <Link href="/">
-            <Image src={information.brandImage} alt="brandimage" width={100} height={100} />
+            <Image
+              src={information.brandImage}
+              alt="brandimage"
+              width={300}
+              height={300}
+            />
           </Link>
+          }
         </div>
 
         <ul className="mi-header-menu">
           <li>
-            <Link href="/">Home</Link>
+            <Link href="/" passHref>
+              <span>Home</span>
+            </Link>
           </li>
           <li>
-            <Link href="/about">About</Link>
+            <Link href="/resume" passHref>
+              <span>Resume</span>
+            </Link>
+          </li>
+          {/* <li>
+            <Link href="/projects" passHref>
+              <span>Projects</span>
+            </Link>
+          </li> */}
+          <li>
+            <Link href="/blog" passHref>
+              <span>Blog</span>
+            </Link>
           </li>
           <li>
-            <Link href="/resume">Resume</Link>
-          </li>
-          <li>
-            <Link href="/portfolios">Portfolios</Link>
-          </li>
-          <li>
-            <Link href="/blogs">Blogs</Link>
-          </li>
-          <li>
-            <Link href="/contact">Contact</Link>
+            <Link href="/contacts" passHref>
+              <span>Contacts</span>
+            </Link>
           </li>
         </ul>
+        <LightModeToggle defaultMode={lightMode} />
+
         <p className="mi-header-copyright">
-          &copy; {new Date().getFullYear()}{" "}
+          &copy; {new Date().getFullYear()}{' '}
           <b>
-            <a rel="noopener noreferrer" target="_blank" href="https://nuclearthemes.com">
-              NuclearThemes
+            <a
+              rel="noopener noreferrer"
+              target="_blank"
+              href="/"
+            >
+              Andrei Tazetdinov
             </a>
           </b>
         </p>
@@ -62,3 +101,5 @@ export default async function Header() {
     </nav>
   );
 }
+
+export default Header;

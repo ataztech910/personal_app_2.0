@@ -9,8 +9,8 @@
   transform: translateX(0);
   height: 100vh;
   width: 300px;
-  background: lighten($color-bg-body, 5);
-  border-right: 1px solid $color-border;
+  background: $color-black;
+  border-right: lighten($color-bg-body, 5);
   z-index: 10;
   transition: $transition;
 
@@ -41,7 +41,7 @@
     display: none;
 
     &:focus {
-      border-color: $color-border;
+      outline: 1px solid $color-secondary;
     }
   }
 
@@ -50,22 +50,26 @@
     display: block;
     width: 100%;
     text-align: center;
-    border-bottom: 1px solid $color-border;
+    border-bottom: 1px solid $light-color-bg-dark;
 
     a {
       height: 200px;
       width: 200px;
       border-radius: 1000px;
-      border: 7px solid $color-border;
+      border: 7px solid $light-color-bg-dark;
       overflow: hidden;
       display: inline-block;
       vertical-align: middle;
+      &:focus {
+        outline: 1px solid $color-secondary;
+      }
     }
 
     img {
       height: 100%;
       width: 100%;
     }
+
   }
 
   &-menu {
@@ -103,19 +107,22 @@
           right: 100%;
           height: 100%;
           width: 0;
-          background: rgba($color-theme, 0.2);
+          background: rgba($color-theme, 0.5);
           visibility: hidden;
           transition: $transition;
           z-index: -1;
         }
 
         &:hover {
-          color: $color-theme;
+          color: $color-secondary;
 
           &::before {
             width: 100%;
             visibility: visible;
           }
+        }
+        &:focus {
+          outline: 1px solid $color-secondary;
         }
 
         &.active {
@@ -139,6 +146,7 @@
     font-size: 1rem;
     padding: 15px 0;
     border-top: 1px solid $color-border;
+    margin-top: 2rem;
 
     a {
       color: $color-body;
@@ -183,7 +191,7 @@
   }
 
   @media #{$layout-tablet} {
-    width: 250px;
+    width: calc(100vw - 55px);
     transform: translateX(-100%);
 
     &-toggler {
@@ -207,7 +215,7 @@
   }
 
   @media #{$layout-mobile-lg} {
-    width: 250px;
+    width: calc(100vw - 55px);
     transform: translateX(-100%);
 
     &-toggler {
@@ -229,4 +237,14 @@
       }
     }
   }
+}
+
+.light-switch {
+  margin-bottom: 0;
+  margin-top: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 6rem;
+  justify-content: space-between;
 }
