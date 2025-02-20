@@ -1,23 +1,20 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Noto_Sans} from "next/font/google";
 import "./globals.scss";
 import Header from "@/app/components/Header";
 import BackgroundLines from "./components/BackgroundLines";
 import { cookies } from "next/headers";
-// import LightModeToggle from "@/app/components/LightModeToggle"; // Client Component for toggling
 import { config } from '@fortawesome/fontawesome-svg-core';
 
 
 import '@fortawesome/fontawesome-svg-core/styles.css';
 config.autoAddCss = false;
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+const geistSans = Noto_Sans({
+  subsets: ["latin"]
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const geistMono = Noto_Sans({
   subsets: ["latin"],
 });
 
@@ -32,7 +29,7 @@ export default function RootLayout({
 
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} ${lightMode ? "light" : ""}`}>
+      <body className={`${geistSans.className} ${geistMono.className} ${lightMode ? "light" : ""}`}>
         <div className="mi-wrapper">
           <BackgroundLines />
           <Header lightMode={lightMode} />
