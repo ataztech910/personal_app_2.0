@@ -1,17 +1,19 @@
 "use client";
-import React, { useEffect, useState } from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
+import React, { useEffect, useState } from "react";
+import Link from "next/link";
+import Image from "next/image";
 import LightModeToggle from "@/app/components/LightModeToggle";
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faBars, faClose } from '@fortawesome/free-solid-svg-icons';
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faBars, faClose } from "@fortawesome/free-solid-svg-icons";
 library.add(faBars, faClose);
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { usePathname } from 'next/navigation';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { usePathname } from "next/navigation";
 
-function Header({lightMode}:  any) {
-  const [information, setInformation] = useState<{brandImage: string}>({brandImage : ''});
+function Header({ lightMode }: any) {
+  const [information, setInformation] = useState<{ brandImage: string }>({
+    brandImage: "",
+  });
   const [navigationToggle, setNavigationToggle] = useState(false);
   const pathname = usePathname();
 
@@ -26,16 +28,13 @@ function Header({lightMode}:  any) {
   }, []);
 
   useEffect(() => {
-    console.log('router change')
+    console.log("router change");
     setNavigationToggle(false);
   }, [pathname]);
 
   return (
-    <nav className={navigationToggle ? 'mi-header is-visible' : 'mi-header'}>
-      <button
-        onClick={handleNavigationToggler}
-        className="mi-header-toggler"
-      >
+    <nav className={navigationToggle ? "mi-header is-visible" : "mi-header"}>
+      <button onClick={handleNavigationToggler} className="mi-header-toggler">
         {!navigationToggle ? (
           <FontAwesomeIcon icon="bars" />
         ) : (
@@ -44,16 +43,16 @@ function Header({lightMode}:  any) {
       </button>
       <div className="mi-header-inner">
         <div className="mi-header-image">
-          {information.brandImage.length > 0 &&
-          <Link href="/">
-            <Image
-              src={information.brandImage}
-              alt="brandimage"
-              width={300}
-              height={300}
-            />
-          </Link>
-          }
+          {information.brandImage.length > 0 && (
+            <Link href="/">
+              <Image
+                src={information.brandImage}
+                alt="brandimage"
+                width={300}
+                height={300}
+              />
+            </Link>
+          )}
         </div>
 
         <ul className="mi-header-menu">
@@ -86,13 +85,9 @@ function Header({lightMode}:  any) {
         <LightModeToggle defaultMode={lightMode} />
 
         <p className="mi-header-copyright">
-          &copy; {new Date().getFullYear()}{' '}
+          &copy; {new Date().getFullYear()}{" "}
           <b>
-            <a
-              rel="noopener noreferrer"
-              target="_blank"
-              href="/"
-            >
+            <a rel="noopener noreferrer" target="_blank" href="/">
               Andrei Tazetdinov
             </a>
           </b>

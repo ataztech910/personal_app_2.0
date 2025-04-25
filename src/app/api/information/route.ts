@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 
 export async function GET() {
   return NextResponse.json({
-    brandImage: "/avatar.png",
+    brandImage: "/avatar.jpg",
     information: {
       name: "Andrei Tazetdinov",
       aboutContent:
@@ -23,10 +23,9 @@ export async function GET() {
         dribbble: "",
         github: "https://github.com",
       },
-      brandImage: "/images/brand-image.jpg",
       aboutImage: "/images/main_image.jpg",
       aboutImageLg: "/images/main_image.jpg",
-      cvfile: "/files/empty.pdf",
-    }
+      // cvfile: "/files/empty.pdf",
+    },
   });
 }
