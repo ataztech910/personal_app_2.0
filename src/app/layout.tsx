@@ -33,7 +33,7 @@ export default async function RootLayout({
           lightMode ? "light" : ""
         }`}
       >
-        <div className="mi-wrapper">2
+        <div className="mi-wrapper">
           <BackgroundLines />
           <Header lightMode={lightMode} />
           {children}
