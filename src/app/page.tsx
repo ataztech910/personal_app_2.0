@@ -2,6 +2,7 @@ import Sectiontitle from "./components/Sectiontitle";
 import Service from "./components/Service";
 import { getInformation, getServices } from "@/lib/data-fetching";
 import MainImage from "./components/MainImage";
+import { calculateAge } from "@/lib/strings";
 
 export default async function Home() {
   const information = await getInformation();
@@ -69,7 +70,7 @@ export default async function Home() {
                   )}
                   {information.age && (
                     <li>
-                      <b>Age:</b> {information.age} Years
+                      <b>Age:</b> {calculateAge()} Years
                     </li>
                   )}
                   {information.phone && (
