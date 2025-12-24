@@ -9,6 +9,7 @@ library.add(faBars, faClose);
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { usePathname } from "next/navigation";
+import { baseUrl } from "@/lib/data-fetching";
 
 function Header({ lightMode }: any) {
   const [information, setInformation] = useState<{ brandImage: string }>({
@@ -22,7 +23,7 @@ function Header({ lightMode }: any) {
   };
 
   useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/information`)
+    fetch(`${baseUrl}/api/information`)
       .then((response) => response.json())
       .then((data) => setInformation(data));
   }, []);
