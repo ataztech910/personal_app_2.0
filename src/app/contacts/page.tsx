@@ -3,14 +3,16 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import Sectiontitle from "../components/Sectiontitle";
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faPhone, faMailReply, faMap } from '@fortawesome/free-solid-svg-icons';
+import { faPhone, faMailReply, faMap, faMoneyBill1 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-library.add(faPhone, faMailReply, faMap);
+import { faGithub, faLinkedin } from "@fortawesome/free-brands-svg-icons";
+library.add(faPhone, faMailReply, faMap, faMoneyBill1);
+library.add(faLinkedin, faGithub);
 
 export default function Contacts() {
     const [phoneNumbers, setPhoneNumbers] = useState([]);
     const [emailAddress, setEmailAddress] = useState([]);
-    const [address, setAddress] = useState([]);
+    const [address, setAddress] = useState("");
     const [formdata, setFormdata] = useState({
         name: "",
         email: "",
@@ -20,7 +22,7 @@ export default function Contacts() {
   const [error, setError] = useState(false);
   const [message, setMessage] = useState("");
 
-  const submitHandler = (event: any) => {
+  const submitHandler = async (event: any) => {
     event.preventDefault();
     if (!formdata.name) {
       setError(true);
@@ -38,6 +40,30 @@ export default function Contacts() {
       setError(false);
       setMessage("You message has been sent!!!");
     }
+
+    if (error) return;
+
+    try {
+    const res = await fetch("/api/contact", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formdata),
+    });
+
+    if (!res.ok) throw new Error("Failed");
+
+    setError(false);
+    setMessage("Message sent successfully 🚀");
+    setFormdata({
+      name: "",
+      email: "",
+      subject: "",
+      message: "",
+      });
+    } catch (err) {
+      setError(true);
+      setMessage("Failed to send message ❌");
+    }    
   };
   const handleChange = (event: any) => {
     setFormdata({
@@ -62,7 +88,7 @@ export default function Contacts() {
 
   useEffect(() => {
     axios.get("/api/contactinfo").then((response) => {
-      setPhoneNumbers(response.data.phoneNumbers);
+      setPhoneNumbers(response.data.socialMedia);
       setEmailAddress(response.data.emailAddress);
       setAddress(response.data.address);
     });
@@ -142,17 +168,18 @@ export default function Contacts() {
                 <div className="mi-contact-info">
                   {!phoneNumbers ? null : (
                     <div className="mi-contact-infoblock">
-                      <span className="mi-contact-infoblock-icon">
-                        <FontAwesomeIcon icon="phone" />
-                      </span>
+                     
                       <div className="mi-contact-infoblock-content">
-                        <h6>Phone</h6>
-                        {phoneNumbers.map((phoneNumber) => (
-                          <p key={phoneNumber}>
-                            <a href={numberFormatter(phoneNumber)}>
-                              {phoneNumber}
+                        <h6>Links</h6>
+                        {phoneNumbers.map((socialMedia: any) => (
+                          <div className="mi-contact-infoblock-flex" key={socialMedia.name}>
+                             <span className="mi-contact-infoblock-icon">
+                              <FontAwesomeIcon icon={socialMedia.icon} />
+                             </span>
+                            <a href={socialMedia.link} target="_blank">
+                              {socialMedia.name}
                             </a>
-                          </p>
+                          </div>
                         ))}
                       </div>
                     </div>
@@ -175,11 +202,11 @@ export default function Contacts() {
                   {!phoneNumbers ? null : (
                     <div className="mi-contact-infoblock">
                       <span className="mi-contact-infoblock-icon">
-                        <FontAwesomeIcon icon="map" />
+                        <FontAwesomeIcon icon="money-bill-1" />
                       </span>
                       <div className="mi-contact-infoblock-content">
-                        <h6>Address</h6>
-                        <p>{address}</p>
+                        <h6>Support</h6>
+                        <p><a href={address} target="_blank">Buy me a coffe</a></p>
                       </div>
                     </div>
                   )}
