@@ -3,6 +3,7 @@ import Service from "./components/Service";
 import { getInformation, getServices } from "@/lib/data-fetching";
 import MainImage from "./components/MainImage";
 import { calculateAge } from "@/lib/strings";
+import ShowOff from "./components/ShowOff";
 
 export default async function Home() {
   const information = await getInformation();
@@ -12,6 +13,8 @@ export default async function Home() {
     <div>
       <div className="mi-about-area mi-section mi-padding-top">
         <div className="container">
+          <Sectiontitle title="Time to show off" />
+          <ShowOff />
           <Sectiontitle title="About Me" />
           <div className="row align-items-center">
             <div className="col-lg-6">

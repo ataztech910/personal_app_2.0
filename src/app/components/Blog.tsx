@@ -15,7 +15,7 @@ function Blog(props: any) {
     return getName;
   };
   return (
-    <Link href={`${id}/${getNospaceTitle(filesource)}`}>
+    <Link href={filesource} target="_blank">
         <div className="mi-blog">
         <div className="mi-blog-image">
             <Image

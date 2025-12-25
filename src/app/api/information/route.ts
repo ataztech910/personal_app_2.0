@@ -9,10 +9,10 @@ export async function GET() {
         "I am a frontend web developer. I can provide clean code and pixel perfect design. I also make website more & more interactive with web animations.",
       age: 40,
       phone: "",
-      nationality: "Russian",
+      // nationality: "Russian",
       language: "English, Russian",
       email: "",
-      address: "4020, Linz, Austria",
+      address: "4040, Linz, Austria",
       freelanceStatus: "Available",
       socialLinks: {
         facebook: "https://facebook.com",

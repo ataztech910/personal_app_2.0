@@ -4,7 +4,7 @@ export async function GET() {
   return NextResponse.json(
     [
         {
-          title: "HTML5",
+          title: "TypeScript",
           value: 95,
         },
         {
@@ -13,19 +13,19 @@ export async function GET() {
         },
         {
           title: "Javascript",
-          value: 70,
+          value: 100,
         },
         {
-          title: "jQuery",
+          title: "React",
           value: 85,
         },
         {
-          title: "ReactJS",
+          title: "Angular",
           value: 80,
         },
         {
-          title: "Photoshop",
-          value: 65,
+          title: "React Native",
+          value: 75,
         },
       ]
   );

@@ -8,6 +8,8 @@
 
   &-image {
     position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9; /* одинаковая высота */
     overflow: hidden;
 
     img {
@@ -48,10 +50,13 @@
     padding-top: 15px;
 
     h5 {
-      margin-bottom: 0;
-      font-weight: 600;
-      margin-bottom: 0;
+       display: -webkit-box;
+      -webkit-line-clamp: 2;   /* максимум 2 строки */
+      -webkit-box-orient: vertical;
+      overflow: hidden;
 
+      line-height: 1.4;
+      min-height: calc(1.4em * 2); /* фиксируем высоту */
       a {
         transition: $transition;
         color: $color-heading;
