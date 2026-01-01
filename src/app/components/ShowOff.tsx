@@ -27,7 +27,7 @@ const showOffItems: ShowOffItem[] = [
     title: "ADVNCD platform",
     subtitle: "Amplify-like DX for Google Cloud",
     description:
-      "Local-first studio + schema→codegen pipeline that generates TypeScript types, rules/indexes, GraphQL, and ready-to-use React UI. One-click deploy via Terraform and monitoring links. (In documentation stage.)",
+      "Advncd is a local-first developer platform designed for Go applications on Google Cloud. The platform provides a single-binary CLI that handles OAuth authentication, project configuration, and deployments to Cloud Run using direct Google Cloud APIs. Advncd is intentionally Go-first in its initial versions, allowing for a simple and opinionated deployment pipeline with minimal abstraction. Support for additional runtimes and frameworks may be added in future releases.(In documentation stage.)",
     href: "https://advncd-docs.vercel.app/",
     cta: "Open docs",
   },
