@@ -594,4 +594,40 @@
 			}
 		}
 	}
+
+	.mi-advncd {
+		&-eyebrow {
+			color: rgba($light-color-body, 0.9);
+		}
+
+		&-nav {
+			a {
+				background: darken($light-color-bg-body, 5);
+				border-color: $light-color-border;
+				color: $light-color-body;
+
+				&:hover,
+				&.active {
+					background: $light-color-theme;
+					border-color: $light-color-theme;
+					color: #ffffff;
+				}
+			}
+		}
+
+		&-main {
+			background: darken($light-color-bg-body, 5);
+			border-color: $light-color-border;
+		}
+
+		&-section,
+		&-footer {
+			border-color: $light-color-border;
+		}
+
+		&-note {
+			background: rgba($light-color-theme, 0.12);
+			border-left-color: rgba($light-color-theme, 0.85);
+		}
+	}
 }

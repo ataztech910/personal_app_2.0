@@ -63,6 +63,11 @@ function Header({ lightMode }: any) {
             </Link>
           </li>
           <li>
+            <Link href="/advncd" passHref>
+              <span>ADVNCD</span>
+            </Link>
+          </li>
+          <li>
             <Link href="/resume" passHref>
               <span>Resume</span>
             </Link>

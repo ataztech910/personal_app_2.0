@@ -1,0 +1,162 @@
+{
+  "brand": {
+    "name": "ADVNCD CLI",
+    "tagline": "Simplify cloud for devs"
+  },
+  "navigation": [
+    {
+      "href": "/advncd",
+      "label": "Overview"
+    },
+    {
+      "href": "/advncd/privacy",
+      "label": "Privacy Policy"
+    },
+    {
+      "href": "/advncd/terms",
+      "label": "Terms of Service"
+    }
+  ],
+  "home": {
+    "title": "ADVNCD CLI",
+    "subtitle": "Google Cloud first today, with planned support for additional API-enabled cloud providers.",
+    "description": [
+      "ADVNCD is a command-line application focused on making cloud usage simple, with minimal setup and no unnecessary infrastructure overhead.",
+      "Today the platform is focused on Google Cloud workflows from a local environment. Future releases are planned to support other cloud providers that expose stable APIs.",
+      "This section provides the public legal and product information required for Google OAuth consent screen verification."
+    ],
+    "highlights": [
+      {
+        "title": "Primary use case",
+        "description": "Authenticate with Google OAuth and run cloud operations from a local CLI without extra orchestration layers."
+      },
+      {
+        "title": "Platform scope",
+        "description": "Google Cloud is currently supported, with planned expansion to additional API-enabled cloud providers."
+      },
+      {
+        "title": "Data handling model",
+        "description": "OAuth credentials are stored on the user's local machine for ongoing authenticated CLI sessions."
+      }
+    ]
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "effectiveDate": "March 11, 2026",
+    "intro": "This Privacy Policy explains what data ADVNCD CLI processes when you authenticate with Google and how that data is handled.",
+    "sections": [
+      {
+        "heading": "Data We Collect",
+        "paragraphs": [
+          "When you sign in with Google, the app receives your Google account email address and OAuth tokens (such as access and refresh tokens) needed to call Google APIs."
+        ],
+        "items": [
+          "Google account email address",
+          "OAuth access token and refresh token",
+          "Basic technical metadata required for CLI operation (for example, local configuration values)"
+        ]
+      },
+      {
+        "heading": "Why We Use This Data",
+        "paragraphs": [
+          "The data is used only to authenticate you, keep your CLI session active, and execute actions you request against your Google Cloud resources."
+        ],
+        "items": [
+          "Authenticate your identity with Google",
+          "Authorize API requests initiated by you",
+          "Maintain local CLI state between sessions"
+        ]
+      },
+      {
+        "heading": "Storage and Retention",
+        "paragraphs": [
+          "OAuth tokens are stored locally on your device in CLI configuration files. ADVNCD does not use this page to collect or store your OAuth tokens on a separate website backend.",
+          "Data remains on your device until you remove the local credentials or revoke access in your Google account."
+        ],
+        "items": [
+          "Local storage location: user-specific CLI config on your machine",
+          "Retention: until manually removed or Google access is revoked"
+        ]
+      },
+      {
+        "heading": "How To Delete Data or Revoke Access",
+        "paragraphs": [
+          "You can stop processing at any time by deleting local ADVNCD credential files and revoking app access in your Google account permissions page."
+        ],
+        "items": [
+          "Delete local ADVNCD credentials on your device",
+          "Revoke access in Google Account: https://myaccount.google.com/permissions"
+        ]
+      },
+      {
+        "heading": "Contact",
+        "paragraphs": [
+          "For privacy requests or questions, contact the application owner at the email below."
+        ],
+        "items": [
+          "Email: info@andreitazetdinov.com"
+        ]
+      }
+    ]
+  },
+  "terms": {
+    "title": "Terms of Service",
+    "effectiveDate": "March 11, 2026",
+    "intro": "These Terms govern your use of ADVNCD CLI.",
+    "sections": [
+      {
+        "heading": "Service Basis",
+        "paragraphs": [
+          "ADVNCD CLI is provided \"as is\" and \"as available\" without warranties of any kind, express or implied."
+        ],
+        "items": [
+          "No guarantee of uninterrupted operation",
+          "No guarantee that the CLI is error-free for every environment"
+        ]
+      },
+      {
+        "heading": "User Responsibility",
+        "paragraphs": [
+          "You are responsible for all actions performed using your Google account, credentials, and cloud projects when using ADVNCD CLI."
+        ],
+        "items": [
+          "Manage and protect your own credentials",
+          "Review and confirm commands before execution",
+          "Comply with Google Cloud and other applicable cloud provider requirements when supported"
+        ]
+      },
+      {
+        "heading": "Cloud Costs and Resources",
+        "paragraphs": [
+          "You are fully responsible for resources created or modified through ADVNCD CLI and for all related Google Cloud charges. The same responsibility applies to additional cloud providers when support is introduced."
+        ],
+        "items": [
+          "Billing, quotas, and usage costs are your responsibility",
+          "Monitor your own project spending and limits"
+        ]
+      },
+      {
+        "heading": "Limitation of Liability",
+        "paragraphs": [
+          "To the maximum extent permitted by law, ADVNCD CLI maintainers are not liable for indirect, incidental, special, consequential, or financial damages arising from use of the CLI."
+        ],
+        "items": [
+          "Use the tool at your own risk"
+        ]
+      },
+      {
+        "heading": "Contact",
+        "paragraphs": [
+          "Questions about these Terms can be sent to the email below."
+        ],
+        "items": [
+          "Email: info@andreitazetdinov.com"
+        ]
+      }
+    ]
+  },
+  "footer": {
+    "supportLabel": "Support",
+    "supportEmail": "info@andreitazetdinov.com"
+  }
+}
