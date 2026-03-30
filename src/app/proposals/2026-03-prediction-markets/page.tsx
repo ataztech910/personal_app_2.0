@@ -88,6 +88,22 @@ const css = `
     letter-spacing: 0.04em;
   }
   .proposal-root .nav-cta:hover { opacity: 0.88; transform: translateY(-1px); }
+  .proposal-root .nav-pdf {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: var(--sec);
+    padding: 7px 14px;
+    border-radius: 5px;
+    border: 1px solid var(--border);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s, border-color 0.2s;
+    letter-spacing: 0.04em;
+  }
+  .proposal-root .nav-pdf:hover { color: var(--text); border-color: var(--sec); }
 
   /* ── LAYOUT ── */
   .proposal-root .container {
@@ -1194,7 +1210,15 @@ export default function ProposalPage() {
           <li><a href="#timeline">Roadmap</a></li>
           <li><a href="#pricing">Pricing</a></li>
         </ul>
-        <a href="#cta" className="nav-cta">Book a Call →</a>
+        <div style={{display:'flex',gap:'8px',alignItems:'center'}}>
+          <a href="/proposals_files/proposal_prediction_markets_2026_03.pdf" download className="nav-pdf">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            PDF
+          </a>
+          <a href="#cta" className="nav-cta">Book a Call →</a>
+        </div>
       </nav>
 
       {/* HERO */}
