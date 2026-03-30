@@ -158,7 +158,7 @@ const css = `
 
   .proposal-root .hero-name {
     font-family: 'Syne', sans-serif;
-    font-size: clamp(42px, 5vw, 50px);
+    font-size: clamp(36px, 5vw, 52px);
     font-weight: 800;
     line-height: 1;
     letter-spacing: -0.03em;
@@ -432,7 +432,7 @@ const css = `
   }
   .proposal-root .stat-value {
     font-family: 'Syne', sans-serif;
-    font-size: 52px;
+    font-size: clamp(40px, 8vw, 72px);
     font-weight: 800;
     line-height: 1;
     margin-bottom: 6px;
@@ -567,6 +567,42 @@ const css = `
   .proposal-root .ns3 .step-name { color: var(--gold); }
   .proposal-root .ns4 .step-num { background: rgba(167,139,250,0.15); color: var(--purple); }
   .proposal-root .ns4 .step-name { color: var(--purple); }
+
+  .proposal-root .code-header {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px 8px 0 0;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .proposal-root .code-header-left {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .proposal-root .code-header-dot {
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .proposal-root .code-header-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--sec);
+    margin-left: 4px;
+  }
+  .proposal-root .code-header-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: var(--accent);
+    background: rgba(0,212,170,0.08);
+    border: 1px solid rgba(0,212,170,0.25);
+    padding: 3px 10px;
+    border-radius: 999px;
+    letter-spacing: 0.08em;
+  }
 
   .proposal-root .code-snippet {
     background: #070C14;
@@ -732,7 +768,7 @@ const css = `
   }
   .proposal-root .price-value {
     font-family: 'Syne', sans-serif;
-    font-size: 64px;
+    font-size: clamp(42px, 5vw, 64px);
     font-weight: 800;
     color: var(--accent);
     line-height: 1;
@@ -984,11 +1020,94 @@ const css = `
     .proposal-root .hero-inner { grid-template-columns: 1fr; }
     .proposal-root .hero-right { display: none; }
     .proposal-root .exp-grid { grid-template-columns: 1fr; }
-    .proposal-root .norm-flow { grid-template-columns: 1fr 1fr; }
-    .proposal-root .weeks-grid { grid-template-columns: 1fr 1fr; }
+    .proposal-root .norm-flow {
+      grid-template-columns: unset;
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      gap: 2px;
+      padding-left: 32px;
+      padding-right: 32px;
+      margin-left: -32px;
+      margin-right: -32px;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      border-radius: 0;
+    }
+    .proposal-root .norm-flow::-webkit-scrollbar { display: none; }
+    .proposal-root .norm-step {
+      scroll-snap-align: start;
+      flex: 0 0 68vw;
+      min-width: 0;
+    }
+    .proposal-root .norm-hint { display: flex; }
     .proposal-root .pricing-grid { grid-template-columns: 1fr; }
     .proposal-root .stats-grid { grid-template-columns: 1fr; }
     .proposal-root nav .nav-links { display: none; }
+
+    .proposal-root .weeks-grid {
+      grid-template-columns: unset;
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      gap: 12px;
+      padding-bottom: 16px;
+      padding-left: 32px;
+      padding-right: 32px;
+      margin-left: -32px;
+      margin-right: -32px;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .proposal-root .weeks-grid::-webkit-scrollbar { display: none; }
+    .proposal-root .week-card {
+      scroll-snap-align: start;
+      flex: 0 0 68vw;
+      min-width: 0;
+    }
+    .proposal-root .carousel-hint { display: flex; }
+  }
+  .proposal-root .norm-hint {
+    display: none;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
+    margin-bottom: 4px;
+  }
+  .proposal-root .norm-hint span {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .proposal-root .norm-hint .carousel-arrow {
+    animation: proposal-slide 1.4s ease-in-out infinite;
+  }
+  .proposal-root .carousel-hint {
+    display: none;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
+    margin-bottom: 4px;
+  }
+  .proposal-root .carousel-hint span {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .proposal-root .carousel-arrow {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    color: var(--muted);
+    animation: proposal-slide 1.4s ease-in-out infinite;
+  }
+  @keyframes proposal-slide {
+    0%, 100% { transform: translateX(0); opacity: 0.5; }
+    50% { transform: translateX(6px); opacity: 1; }
   }
 `;
 
@@ -1091,7 +1210,7 @@ export default function ProposalPage() {
               </div>
 
               <div className="hero-name">Andrei Tazetdinov</div>
-              <div className="hero-role">Fintech Engineer · Real-Time Systems &amp; Data Dashboards</div>
+              <div className="hero-role">Full-Stack Engineer · Real-Time Systems &amp; Data Dashboards</div>
               <div className="hero-tagline">
                 I&apos;ve built platforms for <strong>real money, real users, real deadlines</strong> —<br />
                 at IBM, Dynatrace, and FXTM. Your application is exactly my lane.
@@ -1299,7 +1418,26 @@ export default function ProposalPage() {
             </div>
           </div>
 
-          <div className="code-snippet">
+          <div className="norm-hint">
+            <span>scroll</span>
+            <div className="carousel-arrow">
+              <svg width="48" height="12" viewBox="0 0 48 12" fill="none">
+                <line x1="0" y1="6" x2="42" y2="6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                <polyline points="36,1 43,6 36,11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+              </svg>
+            </div>
+          </div>
+
+          <div className="code-header">
+            <div className="code-header-left">
+              <span className="code-header-dot" style={{background:'#FF5F57'}}></span>
+              <span className="code-header-dot" style={{background:'#FFBD2E'}}></span>
+              <span className="code-header-dot" style={{background:'#28CA41'}}></span>
+              <span className="code-header-title">ingestion/normalise.ts</span>
+            </div>
+            <span className="code-header-badge">copy-paste ready</span>
+          </div>
+          <div className="code-snippet" style={{borderRadius: '0 0 8px 8px', borderTop: 'none'}}>
             <span className="cm">{'// ingestion/normalise.ts'}</span>{'\n'}
             <span className="k">function</span> <span className="fn">toProbability</span>(<span className="prop">raw</span>: <span className="prop">number</span>, <span className="prop">format</span>: <span className="str">&apos;decimal&apos;</span> | <span className="str">&apos;percentage&apos;</span>): <span className="prop">number</span> {'{'}{'\n'}
             {'  '}<span className="k">return</span> <span className="prop">format</span> === <span className="str">&apos;percentage&apos;</span> ? <span className="prop">raw</span> / <span className="num">100</span> : <span className="prop">raw</span>;  <span className="cm">{'// always 0–1'}</span>{'\n'}
@@ -1365,6 +1503,16 @@ export default function ProposalPage() {
                 <li>Handoff + docs</li>
                 <li>Buffer for QA &amp; fixes</li>
               </ul>
+            </div>
+          </div>
+
+          <div className="carousel-hint">
+            <span>scroll</span>
+            <div className="carousel-arrow">
+              <svg width="48" height="12" viewBox="0 0 48 12" fill="none">
+                <line x1="0" y1="6" x2="42" y2="6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                <polyline points="36,1 43,6 36,11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+              </svg>
             </div>
           </div>
 
