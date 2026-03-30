@@ -1,0 +1,1291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Andrei Tazetdinov — Fintech Dashboard Proposal</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap');
+
+  :root {
+    --bg:       #060810;
+    --surface:  #0D1220;
+    --surface2: #111828;
+    --border:   #1A2235;
+    --accent:   #00D4AA;
+    --blue:     #0099FF;
+    --gold:     #F5C842;
+    --purple:   #A78BFA;
+    --red:      #FF4D6D;
+    --text:     #F0F4FF;
+    --sec:      #8B95B0;
+    --muted:    #4A5268;
+    --max:      1100px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    font-family: 'Inter', sans-serif;
+    color: var(--text);
+    line-height: 1.6;
+  }
+
+  /* ── NOISE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(6,8,16,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .nav-logo {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+  }
+  .nav-links {
+    display: flex;
+    gap: 28px;
+    list-style: none;
+  }
+  .nav-links a {
+    font-size: 11px;
+    color: var(--sec);
+    text-decoration: none;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--text); }
+  .nav-cta {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    background: var(--accent);
+    color: #060810;
+    padding: 7px 18px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: opacity 0.2s, transform 0.15s;
+    letter-spacing: 0.04em;
+  }
+  .nav-cta:hover { opacity: 0.88; transform: translateY(-1px); }
+
+  /* ── LAYOUT ── */
+  .container {
+    max-width: var(--max);
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  section {
+    padding: 80px 0;
+    position: relative;
+  }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding-top: 56px;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,212,170,0.07) 0%, transparent 70%),
+      var(--bg);
+    overflow: hidden;
+  }
+
+  #hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 28px 28px;
+    pointer-events: none;
+  }
+
+  .hero-inner {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+    width: 100%;
+  }
+
+  .hero-left { min-width: 0; }
+
+  .badges {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+  .badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    padding: 4px 12px;
+    border-radius: 999px;
+    border: 1px solid;
+    text-transform: uppercase;
+  }
+  .badge-teal   { color: var(--accent); border-color: rgba(0,212,170,0.35); background: rgba(0,212,170,0.08); }
+  .badge-blue   { color: var(--blue);   border-color: rgba(0,153,255,0.35); background: rgba(0,153,255,0.08); }
+  .badge-gold   { color: var(--gold);   border-color: rgba(245,200,66,0.35); background: rgba(245,200,66,0.08); }
+  .badge-purple { color: var(--purple); border-color: rgba(167,139,250,0.35); background: rgba(167,139,250,0.08); }
+
+  .hero-name {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(42px, 5vw, 50px);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    margin-bottom: 10px;
+    background: linear-gradient(100deg, #F0F4FF 55%, #00D4AA);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .hero-role {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--accent);
+    letter-spacing: 0.06em;
+    margin-bottom: 16px;
+  }
+  .hero-tagline {
+    font-size: 17px;
+    color: var(--sec);
+    max-width: 460px;
+    line-height: 1.65;
+    margin-bottom: 32px;
+  }
+  .hero-tagline strong { color: var(--text); font-weight: 500; }
+
+  .hero-contacts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 36px;
+  }
+  .hero-contacts a {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--sec);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .hero-contacts a:hover { color: var(--accent); }
+  .hero-contacts .ci { color: var(--accent); font-size: 11px; }
+
+  .hero-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--accent);
+    color: #060810;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 13px 26px;
+    border-radius: 6px;
+    text-decoration: none;
+    letter-spacing: 0.04em;
+    transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
+    box-shadow: 0 0 24px rgba(0,212,170,0.25);
+  }
+  .btn-primary:hover {
+    opacity: 0.88;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 32px rgba(0,212,170,0.35);
+  }
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: transparent;
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 13px 24px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    text-decoration: none;
+    letter-spacing: 0.04em;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .btn-secondary:hover { border-color: var(--sec); color: var(--accent); }
+
+  /* right: mock dashboard */
+  .hero-right {
+    position: relative;
+  }
+  .mock-dashboard {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 40px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(0,212,170,0.08);
+  }
+  .mock-topbar {
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .mock-dots { display: flex; gap: 5px; }
+  .mock-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+  }
+  .d-red    { background: #FF5F57; }
+  .d-yellow { background: #FFBD2E; }
+  .d-green  { background: #28CA41; }
+  .mock-url {
+    flex: 1;
+    background: rgba(255,255,255,0.04);
+    border-radius: 4px;
+    padding: 4px 10px;
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: var(--sec);
+    border: 1px solid var(--border);
+  }
+  .mock-body { padding: 16px; }
+  .mock-head-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+  .mock-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+  }
+  .mock-live {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: var(--accent);
+  }
+  .live-dot {
+    width: 6px; height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.8); }
+  }
+  .mock-row {
+    display: grid;
+    grid-template-columns: 1fr 70px 60px 70px;
+    gap: 8px;
+    padding: 8px 10px;
+    border-radius: 5px;
+    font-size: 10px;
+    align-items: center;
+    border: 1px solid transparent;
+    transition: background 0.2s, border-color 0.2s;
+    cursor: default;
+  }
+  .mock-row:hover { background: rgba(255,255,255,0.03); border-color: var(--border); }
+  .mock-row-head {
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0 10px 6px;
+  }
+  .market-name { font-size: 10px; font-weight: 500; color: var(--text); }
+  .market-tag {
+    font-size: 8px;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+  }
+  .prob { font-family: 'DM Mono', monospace; font-weight: 500; font-size: 11px; }
+  .chg-pos { color: var(--accent); font-size: 9px; font-family: 'DM Mono', monospace; }
+  .chg-neg { color: var(--red);    font-size: 9px; font-family: 'DM Mono', monospace; }
+  .vol { color: var(--muted); font-size: 9px; font-family: 'DM Mono', monospace; }
+  .mini-bar {
+    height: 3px; border-radius: 2px; margin-top: 4px;
+  }
+
+  /* sparkline */
+  .mock-chart {
+    margin-top: 12px;
+    background: var(--surface2);
+    border-radius: 6px;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+  }
+  .chart-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    color: var(--muted);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  svg.sparkline { width: 100%; height: 40px; display: block; }
+
+  /* ── SECTION EYEBROW ── */
+  .eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+  .eyebrow::before {
+    content: '';
+    display: block;
+    width: 28px; height: 2px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+    border-radius: 2px;
+    box-shadow: 0 0 8px var(--accent);
+  }
+  .eyebrow-text {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: var(--muted);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(26px, 3vw, 36px);
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 40px;
+  }
+
+  /* ── STATS ── */
+  #stats {
+    padding: 40px 0;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+  }
+  .stat-item {
+    padding: 28px 36px;
+    position: relative;
+  }
+  .stat-item + .stat-item::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 20%; bottom: 20%;
+    width: 1px;
+    background: var(--border);
+  }
+  .stat-value {
+    font-family: 'Syne', sans-serif;
+    font-size: 52px;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .sv-teal   { color: var(--accent); }
+  .sv-blue   { color: var(--blue); }
+  .sv-gold   { color: var(--gold); }
+  .stat-label { font-size: 13px; color: var(--sec); }
+
+  /* ── WHY ME ── */
+  .exp-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .exp-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 22px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    transition: border-color 0.2s, transform 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .exp-card:hover { transform: translateY(-2px); }
+  .exp-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    border-radius: 3px 0 0 3px;
+  }
+  .ec-teal::before    { background: var(--accent); }
+  .ec-teal:hover      { border-color: rgba(0,212,170,0.3); }
+  .ec-blue::before    { background: var(--blue); }
+  .ec-blue:hover      { border-color: rgba(0,153,255,0.3); }
+  .ec-gold::before    { background: var(--gold); }
+  .ec-gold:hover      { border-color: rgba(245,200,66,0.3); }
+  .ec-purple::before  { background: var(--purple); }
+  .ec-purple:hover    { border-color: rgba(167,139,250,0.3); }
+
+  .exp-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 3px;
+  }
+  .exp-company {
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .exp-desc {
+    font-size: 12px;
+    color: var(--sec);
+    line-height: 1.5;
+  }
+
+  /* ── NORMALIZATION ── */
+  #norm {
+    background:
+      radial-gradient(ellipse 60% 50% at 50% 100%, rgba(0,153,255,0.05) 0%, transparent 70%),
+      var(--bg);
+  }
+  .norm-question {
+    font-size: 14px;
+    color: var(--sec);
+    background: var(--surface);
+    border: 1px solid rgba(245,200,66,0.2);
+    border-left: 3px solid var(--gold);
+    border-radius: 0 6px 6px 0;
+    padding: 14px 18px;
+    margin-bottom: 32px;
+    font-style: italic;
+    line-height: 1.6;
+  }
+  .norm-question strong { color: var(--gold); font-style: normal; }
+
+  .norm-flow {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+    background: var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    margin-bottom: 24px;
+  }
+  .norm-step {
+    background: var(--surface);
+    padding: 24px 20px;
+    position: relative;
+  }
+  .norm-step + .norm-step::before {
+    content: '→';
+    position: absolute;
+    left: -10px; top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted);
+    font-size: 14px;
+    z-index: 1;
+  }
+  .step-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    font-weight: 500;
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 12px;
+  }
+  .step-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .step-desc {
+    font-size: 11px;
+    color: var(--sec);
+    line-height: 1.55;
+  }
+
+  .ns1 .step-num { background: rgba(0,212,170,0.15); color: var(--accent); }
+  .ns1 .step-name { color: var(--accent); }
+  .ns2 .step-num { background: rgba(0,153,255,0.15); color: var(--blue); }
+  .ns2 .step-name { color: var(--blue); }
+  .ns3 .step-num { background: rgba(245,200,66,0.15); color: var(--gold); }
+  .ns3 .step-name { color: var(--gold); }
+  .ns4 .step-num { background: rgba(167,139,250,0.15); color: var(--purple); }
+  .ns4 .step-name { color: var(--purple); }
+
+  .code-snippet {
+    background: #070C14;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 24px;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    line-height: 1.8;
+    overflow-x: auto;
+  }
+  .code-snippet .k { color: var(--purple); }
+  .code-snippet .fn { color: var(--blue); }
+  .code-snippet .str { color: var(--gold); }
+  .code-snippet .cm { color: var(--muted); }
+  .code-snippet .num { color: var(--accent); }
+  .code-snippet .prop { color: var(--text); }
+
+  /* ── TIMELINE ── */
+  #timeline {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .weeks-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .week-card {
+    background: var(--bg);
+    border-radius: 8px;
+    padding: 20px 18px;
+    border-left: 3px solid;
+    border-top: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    transition: transform 0.2s;
+  }
+  .week-card:hover { transform: translateY(-3px); }
+  .week-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    font-weight: 500;
+    padding: 3px 10px;
+    border-radius: 999px;
+    display: inline-block;
+    margin-bottom: 10px;
+    letter-spacing: 0.06em;
+  }
+  .week-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+  .week-items { list-style: none; }
+  .week-items li {
+    font-size: 11px;
+    color: var(--sec);
+    padding: 4px 0 4px 14px;
+    position: relative;
+    line-height: 1.45;
+  }
+  .week-items li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    font-size: 9px;
+  }
+
+  .w1 { border-left-color: var(--accent); }
+  .w1 .week-label { color: var(--accent); background: rgba(0,212,170,0.1); }
+  .w1 .week-title { color: var(--accent); }
+  .w1 li::before  { color: var(--accent); }
+
+  .w2 { border-left-color: var(--blue); }
+  .w2 .week-label { color: var(--blue); background: rgba(0,153,255,0.1); }
+  .w2 .week-title { color: var(--blue); }
+  .w2 li::before  { color: var(--blue); }
+
+  .w3 { border-left-color: var(--gold); }
+  .w3 .week-label { color: var(--gold); background: rgba(245,200,66,0.1); }
+  .w3 .week-title { color: var(--gold); }
+  .w3 li::before  { color: var(--gold); }
+
+  .w4 { border-left-color: var(--purple); }
+  .w4 .week-label { color: var(--purple); background: rgba(167,139,250,0.1); }
+  .w4 .week-title { color: var(--purple); }
+  .w4 li::before  { color: var(--purple); }
+
+  .warning-box {
+    background: rgba(245,200,66,0.05);
+    border: 1px solid rgba(245,200,66,0.2);
+    border-radius: 7px;
+    padding: 14px 18px;
+    font-size: 12px;
+    color: var(--sec);
+    line-height: 1.6;
+  }
+  .warning-box strong { color: var(--gold); }
+
+  /* ── DELIVERABLES + PRICE ── */
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  .deliverables-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .del-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 13px;
+    color: var(--sec);
+    line-height: 1.5;
+    padding: 12px 14px;
+    background: var(--surface);
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    transition: border-color 0.2s;
+  }
+  .del-item:hover { border-color: rgba(0,212,170,0.2); }
+  .del-check {
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 9px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .price-card {
+    background: linear-gradient(145deg, #0A1A17 0%, #08121E 100%);
+    border: 1px solid rgba(0,212,170,0.25);
+    border-radius: 12px;
+    padding: 32px 30px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 60px rgba(0,212,170,0.06);
+  }
+  .price-card::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,212,170,0.08), transparent 70%);
+    pointer-events: none;
+  }
+  .price-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: var(--muted);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .price-value {
+    font-family: 'Syne', sans-serif;
+    font-size: 64px;
+    font-weight: 800;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .price-sub {
+    font-size: 12px;
+    color: var(--sec);
+    margin-bottom: 28px;
+    line-height: 1.5;
+  }
+  .payment-splits {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .split-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    padding: 11px 16px;
+    border-radius: 6px;
+    font-weight: 500;
+  }
+  .split-teal { background: rgba(0,212,170,0.1); color: var(--accent); border: 1px solid rgba(0,212,170,0.2); }
+  .split-blue { background: rgba(0,153,255,0.1); color: var(--blue);   border: 1px solid rgba(0,153,255,0.2); }
+  .split-note {
+    font-size: 11px;
+    color: var(--muted);
+    font-style: italic;
+    line-height: 1.5;
+  }
+
+  /* ── CTA ── */
+  #cta {
+    background:
+      radial-gradient(ellipse 70% 60% at 50% 50%, rgba(0,212,170,0.07) 0%, transparent 70%),
+      var(--surface);
+    border-top: 1px solid var(--border);
+    text-align: center;
+  }
+  .cta-inner {
+    max-width: 640px;
+    margin: 0 auto;
+  }
+  .cta-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: var(--accent);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .cta-eyebrow::before, .cta-eyebrow::after {
+    content: '';
+    display: block;
+    width: 32px; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent));
+  }
+  .cta-eyebrow::after { transform: scaleX(-1); }
+  .cta-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(32px, 4vw, 48px);
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 16px;
+    letter-spacing: -0.02em;
+  }
+  .cta-sub {
+    font-size: 15px;
+    color: var(--sec);
+    line-height: 1.6;
+    margin-bottom: 40px;
+  }
+  .cta-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 48px;
+  }
+  .btn-calendly {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--accent);
+    color: #060810;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 16px 32px;
+    border-radius: 7px;
+    text-decoration: none;
+    letter-spacing: 0.04em;
+    transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
+    box-shadow: 0 0 32px rgba(0,212,170,0.3);
+  }
+  .btn-calendly:hover {
+    opacity: 0.88;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 40px rgba(0,212,170,0.4);
+  }
+  .btn-calendly svg { width: 16px; height: 16px; }
+
+  .social-links {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .social-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 12px;
+    color: var(--sec);
+    text-decoration: none;
+    padding: 10px 18px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.04em;
+    transition: color 0.2s, border-color 0.2s, background 0.2s;
+  }
+  .social-link:hover {
+    color: var(--text);
+    border-color: var(--sec);
+    background: rgba(255,255,255,0.03);
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--bg);
+    border-top: 1px solid var(--border);
+    padding: 24px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  footer span {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 860px) {
+    .hero-inner { grid-template-columns: 1fr; }
+    .hero-right { display: none; }
+    .exp-grid { grid-template-columns: 1fr; }
+    .norm-flow { grid-template-columns: 1fr 1fr; }
+    .weeks-grid { grid-template-columns: 1fr 1fr; }
+    .pricing-grid { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: 1fr; }
+    nav .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <span class="nav-logo">AT · PROPOSAL</span>
+  <ul class="nav-links">
+    <li><a href="#why">Experience</a></li>
+    <li><a href="#norm">Tech Approach</a></li>
+    <li><a href="#timeline">Roadmap</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+  </ul>
+  <a href="#cta" class="nav-cta">Book a Call →</a>
+</nav>
+
+
+<!-- ════════════════════════════════════════
+     HERO
+════════════════════════════════════════ -->
+<section id="hero">
+  <div class="container">
+    <div class="hero-inner">
+
+      <div class="hero-left">
+        <div class="badges">
+          <span class="badge badge-teal">FINTECH</span>
+          <span class="badge badge-blue">NEXT.JS</span>
+          <span class="badge badge-gold">15+ YRS EXP</span>
+          <span class="badge badge-purple">PUBLISHED AUTHOR</span>
+        </div>
+
+        <div class="hero-name">Andrei Tazetdinov</div>
+        <div class="hero-role">Full-Stack Engineer · Fintech &amp; Real-Time Systems</div>
+        <div class="hero-tagline">
+          I ship <strong>fintech products under pressure</strong> — not decks, not estimates.<br>
+          Working code. On time.
+        </div>
+
+        <div class="hero-contacts">
+          <a href="mailto:webconsult.ekb@gmail.com"><span class="ci">✉</span> webconsult.ekb@gmail.com</a>
+          <a href="https://andreitazetdinov.com" target="_blank"><span class="ci">⌂</span> andreitazetdinov.com</a>
+          <a href="https://github.com/ataztech910" target="_blank"><span class="ci">▷</span> github.com/ataztech910</a>
+          <a href="https://linkedin.com/in/andreitazetdinov" target="_blank"><span class="ci">in</span> LinkedIn</a>
+        </div>
+
+        <div class="hero-actions">
+          <a href="#cta" class="btn-primary">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            Book a Call
+          </a>
+          <a href="#timeline" class="btn-secondary">View Roadmap →</a>
+        </div>
+      </div>
+
+      <!-- MOCK DASHBOARD -->
+      <div class="hero-right">
+        <div class="mock-dashboard">
+          <div class="mock-topbar">
+            <div class="mock-dots">
+              <div class="mock-dot d-red"></div>
+              <div class="mock-dot d-yellow"></div>
+              <div class="mock-dot d-green"></div>
+            </div>
+            <div class="mock-url">prediction-markets.app/dashboard</div>
+          </div>
+          <div class="mock-body">
+            <div class="mock-head-row">
+              <div class="mock-title">Markets</div>
+              <div class="mock-live"><div class="live-dot"></div> LIVE</div>
+            </div>
+            <div class="mock-row-head" style="display:grid;grid-template-columns:1fr 70px 60px 70px;gap:8px;padding:0 10px 6px;">
+              <span>EVENT</span><span>PROB</span><span>24H</span><span>VOL</span>
+            </div>
+            <div class="mock-row">
+              <div><div class="market-name">BTC above $100k</div><div class="market-tag">POLYMARKET</div></div>
+              <div class="prob" style="color:var(--accent)">62%</div>
+              <div class="chg-pos">+4.2%</div>
+              <div class="vol">$2.4M</div>
+            </div>
+            <div class="mock-row">
+              <div><div class="market-name">Fed cuts in June</div><div class="market-tag">KALSHI</div></div>
+              <div class="prob" style="color:var(--blue)">38%</div>
+              <div class="chg-neg">-1.8%</div>
+              <div class="vol">$880K</div>
+            </div>
+            <div class="mock-row">
+              <div><div class="market-name">US recession 2025</div><div class="market-tag">POLYMARKET</div></div>
+              <div class="prob" style="color:var(--gold)">29%</div>
+              <div class="chg-pos">+7.1%</div>
+              <div class="vol">$3.1M</div>
+            </div>
+            <div class="mock-row">
+              <div><div class="market-name">ETH ETF approval</div><div class="market-tag">KALSHI</div></div>
+              <div class="prob" style="color:var(--purple)">71%</div>
+              <div class="chg-neg">-0.5%</div>
+              <div class="vol">$1.7M</div>
+            </div>
+            <div class="mock-chart">
+              <div class="chart-label">BTC $100k · 7-day probability</div>
+              <svg class="sparkline" viewBox="0 0 300 40" preserveAspectRatio="none">
+                <defs>
+                  <linearGradient id="sg" x1="0" x2="0" y1="0" y2="1">
+                    <stop offset="0%" stop-color="#00D4AA" stop-opacity="0.25"/>
+                    <stop offset="100%" stop-color="#00D4AA" stop-opacity="0"/>
+                  </linearGradient>
+                </defs>
+                <path d="M0,32 L30,28 L60,30 L90,22 L120,18 L150,20 L180,14 L210,16 L240,10 L270,8 L300,6" fill="none" stroke="#00D4AA" stroke-width="1.8" stroke-linejoin="round"/>
+                <path d="M0,32 L30,28 L60,30 L90,22 L120,18 L150,20 L180,14 L210,16 L240,10 L270,8 L300,6 L300,40 L0,40 Z" fill="url(#sg)"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════
+     STATS
+════════════════════════════════════════ -->
+<section id="stats">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-item">
+        <div class="stat-value sv-teal">15+</div>
+        <div class="stat-label">Years shipping production code</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value sv-blue">2</div>
+        <div class="stat-label">Fintech platforms built end-to-end</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value sv-gold">2</div>
+        <div class="stat-label">Published books on Next.js</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════
+     WHY ME
+════════════════════════════════════════ -->
+<section id="why">
+  <div class="container">
+    <div class="eyebrow"><span class="eyebrow-text">Why me</span></div>
+    <div class="section-title">Built for this exact project</div>
+
+    <div class="exp-grid">
+      <div class="exp-card ec-teal">
+        <div class="exp-dot" style="background:var(--accent);box-shadow:0 0 8px var(--accent)"></div>
+        <div>
+          <div class="exp-company" style="color:var(--accent)">NBH Markets (Forex)</div>
+          <div class="exp-desc">Gold trading platform from scratch — real money, real users, strict deadlines. Full-stack, live price feeds, charting.</div>
+        </div>
+      </div>
+      <div class="exp-card ec-blue">
+        <div class="exp-dot" style="background:var(--blue);box-shadow:0 0 8px var(--blue)"></div>
+        <div>
+          <div class="exp-company" style="color:var(--blue)">FXTM Trading App</div>
+          <div class="exp-desc">Led team 0 → production. Live on App Store &amp; Google Play today. Real-time data, WebSockets, complex UI.</div>
+        </div>
+      </div>
+      <div class="exp-card ec-gold">
+        <div class="exp-dot" style="background:var(--gold);box-shadow:0 0 8px var(--gold)"></div>
+        <div>
+          <div class="exp-company" style="color:var(--gold)">Dynatrace (Senior SWE)</div>
+          <div class="exp-desc">Developer tools used by 10,000+ engineers worldwide. Performance-critical data dashboards, scalable backend.</div>
+        </div>
+      </div>
+      <div class="exp-card ec-purple">
+        <div class="exp-dot" style="background:var(--purple);box-shadow:0 0 8px var(--purple)"></div>
+        <div>
+          <div class="exp-company" style="color:var(--purple)">advncd-cli (Open Source)</div>
+          <div class="exp-desc">My own GCP deploy CLI — infrastructure is never the bottleneck. I own the whole stack.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════
+     NORMALIZATION
+════════════════════════════════════════ -->
+<section id="norm">
+  <div class="container">
+    <div class="eyebrow"><span class="eyebrow-text">Technical approach</span></div>
+    <div class="section-title">Data Normalization Strategy</div>
+
+    <div class="norm-question">
+      <strong>Your question:</strong> "If one platform provides odds as prices (0.62) and another as percentages (62%), how would you normalize and store this data?"
+    </div>
+
+    <div class="norm-flow">
+      <div class="norm-step ns1">
+        <div class="step-num">01</div>
+        <div class="step-name">Ingest</div>
+        <div class="step-desc">Collect raw values from each source as-is. No transformation yet — preserve the original for audit.</div>
+      </div>
+      <div class="norm-step ns2">
+        <div class="step-num">02</div>
+        <div class="step-name">Normalize</div>
+        <div class="step-desc">Convert everything to float 0–1 at ingestion layer. 62% → 0.62, 0.62 stays as-is.</div>
+      </div>
+      <div class="norm-step ns3">
+        <div class="step-num">03</div>
+        <div class="step-name">Store</div>
+        <div class="step-desc">FLOAT in Postgres + <code style="color:var(--gold);font-size:10px">source_format</code> column for full traceability.</div>
+      </div>
+      <div class="norm-step ns4">
+        <div class="step-num">04</div>
+        <div class="step-name">Display</div>
+        <div class="step-desc">Render as % in UI. One source of truth, always consistent across all markets.</div>
+      </div>
+    </div>
+
+    <div class="code-snippet">
+<span class="cm">// ingestion/normalise.ts</span>
+<span class="k">function</span> <span class="fn">toProbability</span>(<span class="prop">raw</span>: <span class="prop">number</span>, <span class="prop">format</span>: <span class="str">'decimal'</span> | <span class="str">'percentage'</span>): <span class="prop">number</span> {
+  <span class="k">return</span> <span class="prop">format</span> === <span class="str">'percentage'</span> ? <span class="prop">raw</span> / <span class="num">100</span> : <span class="prop">raw</span>;  <span class="cm">// always 0–1</span>
+}
+
+<span class="cm">// Polymarket returns 0.62  → toProbability(0.62, 'decimal')  → 0.62</span>
+<span class="cm">// Kalshi   returns 62     → toProbability(62,   'percentage') → 0.62</span>
+
+<span class="cm">// schema</span>
+<span class="k">type</span> <span class="prop">MarketSnapshot</span> = {
+  <span class="prop">market_id</span>:     <span class="prop">string</span>;
+  <span class="prop">source</span>:        <span class="str">'polymarket'</span> | <span class="str">'kalshi'</span>;
+  <span class="prop">probability</span>:   <span class="prop">number</span>;   <span class="cm">// FLOAT 0–1, single truth</span>
+  <span class="prop">raw_value</span>:     <span class="prop">number</span>;   <span class="cm">// original value for audit</span>
+  <span class="prop">source_format</span>: <span class="prop">string</span>;   <span class="cm">// 'decimal' | 'percentage'</span>
+  <span class="prop">fetched_at</span>:    <span class="prop">Date</span>;
+};
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════
+     TIMELINE
+════════════════════════════════════════ -->
+<section id="timeline">
+  <div class="container">
+    <div class="eyebrow"><span class="eyebrow-text">Delivery plan</span></div>
+    <div class="section-title">4-Week Roadmap</div>
+
+    <div class="weeks-grid">
+      <div class="week-card w1">
+        <span class="week-label">WEEK 1</span>
+        <div class="week-title">Foundation</div>
+        <ul class="week-items">
+          <li>Polymarket API pipeline + cron</li>
+          <li>Supabase schema setup</li>
+          <li>Basic dashboard UI in Next.js</li>
+          <li>Markets table + live refresh</li>
+        </ul>
+      </div>
+      <div class="week-card w2">
+        <span class="week-label">WEEK 2</span>
+        <div class="week-title">Core Product</div>
+        <ul class="week-items">
+          <li>Market detail pages</li>
+          <li>Price history charts (Recharts)</li>
+          <li>Top movers section</li>
+          <li>Trade buttons (external links)</li>
+        </ul>
+      </div>
+      <div class="week-card w3">
+        <span class="week-label">WEEK 3</span>
+        <div class="week-title">Second Source</div>
+        <ul class="week-items">
+          <li>Kalshi integration</li>
+          <li>Cross-platform normalization</li>
+          <li>Platform comparison view</li>
+          <li>Stable cron jobs + monitoring</li>
+        </ul>
+      </div>
+      <div class="week-card w4">
+        <span class="week-label">WEEK 4</span>
+        <div class="week-title">Ship It</div>
+        <ul class="week-items">
+          <li>UI polish &amp; performance</li>
+          <li>Vercel deploy + SEO</li>
+          <li>Handoff + docs</li>
+          <li>Buffer for QA &amp; fixes</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="warning-box">
+      <strong>⚠ One dependency to flag:</strong> Kalshi API requires account verification which can take a few business days.
+      Please confirm active API access before we start — this is the only external timeline risk I can't control.
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════
+     PRICING + DELIVERABLES
+════════════════════════════════════════ -->
+<section id="pricing">
+  <div class="container">
+    <div class="eyebrow"><span class="eyebrow-text">Scope &amp; investment</span></div>
+    <div class="section-title">What's Included</div>
+
+    <div class="pricing-grid">
+      <div class="deliverables-list">
+        <div class="del-item">
+          <div class="del-check" style="background:rgba(0,212,170,0.15);color:var(--accent)">✓</div>
+          Live dashboard — Polymarket + Kalshi, auto-refresh every 1–5 min
+        </div>
+        <div class="del-item">
+          <div class="del-check" style="background:rgba(0,153,255,0.15);color:var(--blue)">✓</div>
+          Market detail pages — YES/NO probabilities, price charts, platform comparison
+        </div>
+        <div class="del-item">
+          <div class="del-check" style="background:rgba(245,200,66,0.15);color:var(--gold)">✓</div>
+          Supabase backend — clean schema, cron jobs, upsert sync
+        </div>
+        <div class="del-item">
+          <div class="del-check" style="background:rgba(167,139,250,0.15);color:var(--purple)">✓</div>
+          Deployed on Vercel, SEO-friendly, fast load times
+        </div>
+        <div class="del-item">
+          <div class="del-check" style="background:rgba(0,212,170,0.15);color:var(--accent)">✓</div>
+          Daily async updates via Slack or Loom throughout the build
+        </div>
+      </div>
+
+      <div class="price-card">
+        <div class="price-label">Total Investment</div>
+        <div class="price-value">$8,080</div>
+        <div class="price-sub">
+          Fixed price · No surprises<br>
+          One builder, no agency overhead
+        </div>
+        <div class="payment-splits">
+          <div class="split-row split-teal">50% Upfront — $3,500</div>
+          <div class="split-row split-blue">50% On delivery — $3,500</div>
+        </div>
+        <div class="split-note">Direct communication · Daily updates · Fast iterations<br>
+        Milestone review at end of Week 2 before second source work begins.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════
+     CTA
+════════════════════════════════════════ -->
+<section id="cta">
+  <div class="container">
+    <div class="cta-inner">
+      <div class="cta-eyebrow">Ready to build</div>
+      <div class="cta-title">Let's ship your<br>fintech dashboard.</div>
+      <div class="cta-sub">
+        30-minute call to align on scope, answer your questions,<br>
+        and confirm we're a good fit. No pitch, just talk.
+      </div>
+
+      <div class="cta-buttons">
+        <a href="https://calendly.com/YOUR_LINK" target="_blank" class="btn-calendly">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Book a 30-min Call
+        </a>
+      </div>
+
+      <div class="social-links">
+        <a href="mailto:webconsult.ekb@gmail.com" class="social-link">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          Email
+        </a>
+        <a href="https://linkedin.com/in/andreitazetdinov" target="_blank" class="social-link">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+          LinkedIn
+        </a>
+        <a href="https://github.com/ataztech910" target="_blank" class="social-link">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+          GitHub
+        </a>
+        <a href="https://andreitazetdinov.com" target="_blank" class="social-link">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          Website
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ── FOOTER ── -->
+<footer>
+  <span>Andrei Tazetdinov · Fintech Dashboard Proposal · 2025</span>
+  <span>andreitazetdinov.com</span>
+</footer>
+
+</body>
+</html>
