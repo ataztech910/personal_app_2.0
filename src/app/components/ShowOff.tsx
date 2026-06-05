@@ -49,6 +49,7 @@ const showOffItems: ShowOffItem[] = [
 const devWorldVideos: DevWorldVideo[] = [
   { title: "Killing Wasted Re-renders With Production Hook Instrumentation", youtubeId: "Me0m6WMQ80g" },
   { title: "The New Frontend Stack: Humans, AI, and Prompts", youtubeId: "UhSfwrvZNJc" },
+  { title: "AST + AI = Developer Co-Pilot 2.0", youtubeId: "l1mLz1DaWlw" },
 ];
 
 function ShowOffCard({ item }: { item: ShowOffItem }) {
