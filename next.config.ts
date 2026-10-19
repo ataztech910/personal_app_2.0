@@ -1,12 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
-  // eslint: {
-  //   // Warning: This allows production builds to successfully complete even if
-  //   // your project has ESLint errors.
-  //   ignoreDuringBuilds: true,
-  // },
+  experimental: {
+    // (site) and (legacy) are separate root layouts, so 404 needs its own document
+    globalNotFound: true,
+  },
   images: {
     remotePatterns: [
       {
@@ -17,7 +15,17 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "medium.com",
       },
+      {
+        protocol: "https",
+        hostname: "i.ytimg.com",
+      },
     ],
+  },
+  async redirects() {
+    return [
+      { source: "/contacts", destination: "/contact", permanent: true },
+      { source: "/projects", destination: "/#projects", permanent: true },
+    ];
   },
 };
 

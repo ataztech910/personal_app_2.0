@@ -4,9 +4,9 @@ import { userAutoReplyTemplate } from "@/lib/emailTemplates";
 
 export async function POST(req: Request) {
   try {
-    const { name, email, subject, message } = await req.json();
+    const { name, email, message, newsletter, subject = `Website message from ${name}` } = await req.json();
 
-    if (!name || !email || !subject || !message) {
+    if (!name || !email || !message) {
       return NextResponse.json({ error: "Missing fields" }, { status: 400 });
     }
 
@@ -29,7 +29,7 @@ export async function POST(req: Request) {
       to: ownerEmail,
       replyTo: email,
       subject: `📩 ${subject}`,
-      text: `Name: ${name}\nEmail: ${email}\n\n${message}`,
+      text: `Name: ${name}\nEmail: ${email}\nNewsletter: ${newsletter ? "yes" : "no"}\n\n${message}`,
     });
 
     // 2) автоответ пользователю

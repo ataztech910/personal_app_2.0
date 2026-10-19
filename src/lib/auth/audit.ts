@@ -14,7 +14,7 @@ export async function logAuditEvent(input: AuditInput): Promise<void> {
   const actorIp = input.request ? getRequestIp(input.request) : null;
   const actorUserAgent = input.request ? getRequestUserAgent(input.request) : null;
 
-  await supabaseAdmin.from("audit_events").insert({
+  await supabaseAdmin.from("advncd_audit_events").insert({
     event_type: input.eventType,
     user_id: input.userId || null,
     session_id: input.sessionId || null,
