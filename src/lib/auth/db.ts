@@ -27,7 +27,7 @@ export async function createCliLoginSession(input: {
   userAgent?: string | null;
 }): Promise<CliLoginSessionRow> {
   const { data, error } = await supabaseAdmin
-    .from("cli_login_sessions")
+    .from("advncd_cli_login_sessions")
     .insert({
       session_id: input.sessionId,
       status: "pending",
@@ -47,7 +47,7 @@ export async function getCliLoginSession(
   sessionId: string,
 ): Promise<CliLoginSessionRow | null> {
   const { data, error } = await supabaseAdmin
-    .from("cli_login_sessions")
+    .from("advncd_cli_login_sessions")
     .select("*")
     .eq("session_id", sessionId)
     .maybeSingle<CliLoginSessionRow>();
@@ -60,7 +60,7 @@ export async function findCliLoginSessionByStateHash(
   stateHash: string,
 ): Promise<CliLoginSessionRow | null> {
   const { data, error } = await supabaseAdmin
-    .from("cli_login_sessions")
+    .from("advncd_cli_login_sessions")
     .select("*")
     .eq("oauth_state_hash", stateHash)
     .maybeSingle<CliLoginSessionRow>();
@@ -74,7 +74,7 @@ export async function updateCliLoginSession(
   patch: Partial<CliLoginSessionRow>,
 ): Promise<CliLoginSessionRow> {
   const { data, error } = await supabaseAdmin
-    .from("cli_login_sessions")
+    .from("advncd_cli_login_sessions")
     .update(patch)
     .eq("session_id", sessionId)
     .select("*")
@@ -89,7 +89,7 @@ export async function upsertUserByGoogle(input: {
   googleSub: string;
 }): Promise<UserRow> {
   const { data, error } = await supabaseAdmin
-    .from("users")
+    .from("advncd_users")
     .upsert(
       {
         email: input.email.toLowerCase(),
@@ -106,7 +106,7 @@ export async function upsertUserByGoogle(input: {
 
 export async function getUserById(userId: string): Promise<UserRow | null> {
   const { data, error } = await supabaseAdmin
-    .from("users")
+    .from("advncd_users")
     .select("*")
     .eq("id", userId)
     .maybeSingle<UserRow>();
@@ -130,7 +130,7 @@ export async function upsertGoogleOAuthAccount(input: {
   }
 
   const { data, error } = await supabaseAdmin
-    .from("oauth_accounts")
+    .from("advncd_oauth_accounts")
     .upsert(
       {
         user_id: input.userId,
@@ -152,7 +152,7 @@ export async function getGoogleOAuthAccountByUserId(
   userId: string,
 ): Promise<OAuthAccountRow | null> {
   const { data, error } = await supabaseAdmin
-    .from("oauth_accounts")
+    .from("advncd_oauth_accounts")
     .select("*")
     .eq("user_id", userId)
     .eq("provider", "google")
@@ -169,7 +169,7 @@ export async function createAppTokenRecord(input: {
   refreshExpiresAt: string;
 }): Promise<AppTokenRow> {
   const { data, error } = await supabaseAdmin
-    .from("app_tokens")
+    .from("advncd_app_tokens")
     .insert({
       user_id: input.userId,
       session_id: input.sessionId || null,
@@ -187,7 +187,7 @@ export async function getAppTokenByRefreshHash(
   refreshTokenHash: string,
 ): Promise<AppTokenRow | null> {
   const { data, error } = await supabaseAdmin
-    .from("app_tokens")
+    .from("advncd_app_tokens")
     .select("*")
     .eq("refresh_token_hash", refreshTokenHash)
     .maybeSingle<AppTokenRow>();
@@ -198,7 +198,7 @@ export async function getAppTokenByRefreshHash(
 
 export async function markAppTokenUsed(refreshTokenHash: string): Promise<void> {
   const { error } = await supabaseAdmin
-    .from("app_tokens")
+    .from("advncd_app_tokens")
     .update({ last_used_at: new Date().toISOString() })
     .eq("refresh_token_hash", refreshTokenHash);
 
@@ -207,7 +207,7 @@ export async function markAppTokenUsed(refreshTokenHash: string): Promise<void> 
 
 export async function revokeAppToken(refreshTokenHash: string): Promise<void> {
   const { error } = await supabaseAdmin
-    .from("app_tokens")
+    .from("advncd_app_tokens")
     .update({ revoked_at: new Date().toISOString() })
     .eq("refresh_token_hash", refreshTokenHash)
     .is("revoked_at", null);
@@ -217,7 +217,7 @@ export async function revokeAppToken(refreshTokenHash: string): Promise<void> {
 
 export async function revokeAllUserAppTokens(userId: string): Promise<void> {
   const { error } = await supabaseAdmin
-    .from("app_tokens")
+    .from("advncd_app_tokens")
     .update({ revoked_at: new Date().toISOString() })
     .eq("user_id", userId)
     .is("revoked_at", null);

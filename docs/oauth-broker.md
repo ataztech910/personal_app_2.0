@@ -5,10 +5,10 @@
 This OAuth broker allows `advncd` CLI to authenticate users with Google without embedding `client_secret` in CLI.
 
 - CLI starts login with `POST /api/auth/cli/start`.
-- Server creates short-lived `cli_login_sessions` record (`pending`).
+- Server creates short-lived `advncd_cli_login_sessions` record (`pending`).
 - CLI opens `verify_url` in browser (`/advncd/verify?session_id=...`).
 - Browser flow goes to Google via `/api/auth/google/start` and returns to `/api/auth/google/callback`.
-- Callback exchanges code with Google **server-side** (using `GOOGLE_CLIENT_SECRET`), encrypts refresh token with AES-256-GCM, stores it in `oauth_accounts`, marks session `approved`.
+- Callback exchanges code with Google **server-side** (using `GOOGLE_CLIENT_SECRET`), encrypts refresh token with AES-256-GCM, stores it in `advncd_oauth_accounts`, marks session `approved`.
 - CLI polls `GET /api/auth/cli/poll` until `approved`, receives **app tokens**.
 - CLI exchanges app access token for Google access token with `POST /api/auth/gcp/access-token`.
 
@@ -20,11 +20,11 @@ Use migration:
 
 Tables:
 
-- `users`
-- `cli_login_sessions`
-- `oauth_accounts`
-- `app_tokens`
-- `audit_events`
+- `advncd_users`
+- `advncd_cli_login_sessions`
+- `advncd_oauth_accounts`
+- `advncd_app_tokens`
+- `advncd_audit_events`
 
 ## Local Run Commands
 
@@ -67,7 +67,7 @@ supabase db push
 8. `Google -> Next`: callback with `code`, `state`  
 9. `Next -> Google`: exchange code for tokens  
 10. `Next -> Google`: fetch user info  
-11. `Next -> DB`: upsert `users`, encrypt+store refresh token in `oauth_accounts`, mark session `approved`  
+11. `Next -> DB`: upsert `advncd_users`, encrypt+store refresh token in `advncd_oauth_accounts`, mark session `approved`  
 12. `CLI -> Next`: polling `GET /api/auth/cli/poll?session_id=...`  
 13. `Next -> CLI`: `{ status: "approved", app_access_token, app_refresh_token, expires_in, email }`  
 14. `CLI -> Next`: `POST /api/auth/gcp/access-token` with bearer app token  
