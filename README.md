@@ -2,6 +2,9 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
+For the ChatGPT contact app (MCP endpoint, setup and testing), see
+[docs/chatgpt-contact.md](docs/chatgpt-contact.md).
+
 First, run the development server:
 
 ```bash

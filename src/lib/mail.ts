@@ -8,13 +8,18 @@ type Email = {
 };
 
 /** Sends an email through the Resend REST API. */
-export async function sendEmail(email: Email): Promise<void> {
+export async function sendEmail(email: Email, idempotencyKey?: string): Promise<void> {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) throw new Error("Missing required environment variable: RESEND_API_KEY");
 
   const res = await fetch("https://api.resend.com/emails", {
     method: "POST",
-    headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+      ...(idempotencyKey ? { "Idempotency-Key": idempotencyKey } : {}),
+    },
+    signal: AbortSignal.timeout(15_000),
     body: JSON.stringify({
       from: email.from,
       to: [email.to],
@@ -24,5 +29,6 @@ export async function sendEmail(email: Email): Promise<void> {
       reply_to: email.replyTo,
     }),
   });
-  if (!res.ok) throw new Error(`Resend failed [${res.status}]: ${await res.text()}`);
+  // Provider responses may contain personal data; do not include them in logs.
+  if (!res.ok) throw new Error(`Resend failed [${res.status}]`);
 }
