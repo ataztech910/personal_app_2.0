@@ -46,7 +46,9 @@ under its default policy. Always connect directly to the canonical `www` URL.
    Copy the exact domain verification token shown by the portal into Vercel's
    `OPENAI_APPS_CHALLENGE` environment variable and redeploy. If the portal allows
    choosing a challenge origin, use `https://www.andreitazetdinov.com`.
-   The route returns the exact token as plain text, or 404 while unconfigured.
+   The route returns the exact token as plain text. The public token supplied for
+   this plugin is bundled in the route; `OPENAI_APPS_CHALLENGE` can override it
+   if the portal issues a replacement.
    Confirm the portal's selected challenge URL matches the deployed host/path.
    Do not replace an existing token used by a different app.
 5. Connect/scan the server and resolve reported tool findings. Select the correct
