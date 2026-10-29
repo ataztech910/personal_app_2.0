@@ -33,6 +33,12 @@ for (const test of extension.review.test_cases.positive) {
   reviewedTools.add(test.tools_triggered);
 }
 assert.deepEqual([...reviewedTools].sort(), ["get_profile", "send_contact_message"]);
+if (extension.review.demo_recording_url) {
+  const demo = new URL(extension.review.demo_recording_url);
+  assert.equal(demo.origin, "https://www.andreitazetdinov.com");
+  assert.equal(demo.pathname, "/review/andrei-assistant-demo.mp4");
+  assert.ok(existsSync(resolve(root, "public/review/andrei-assistant-demo.mp4")), "Missing published demo video");
+}
 assert.ok(listing.defaultPrompt.length <= 3 && listing.defaultPrompt.every((p) => p.length <= 128));
 assert.deepEqual(Object.keys(mcp.mcpServers), ["personal-website-contact"]);
 const server = mcp.mcpServers["personal-website-contact"];
@@ -63,7 +69,7 @@ assert.deepEqual(entries, files);
 copyFileSync(zip, resolve(output, "personal-website-contact.zip"));
 console.log(`Package checks passed. Created ${zip}`);
 console.log("ZIP contains only manifest, MCP config and two existing website icons.");
-console.log("Portal validation is still required. Record the demo and verify the domain before submitting.");
+console.log("Portal validation is still required. Confirm demo access and domain verification before submitting.");
 if (!extension.review.demo_recording_url) {
   console.log("Draft upload only: required review.demo_recording_url is not set. Add a real reviewer-accessible video in the portal before submitting.");
 }

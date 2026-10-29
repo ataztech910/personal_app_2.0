@@ -1,12 +1,13 @@
 # Publish Andrei Tazetdinov Assistant
 
 Package source: `chatgpt-plugin/`. Build with `npm run package:chatgpt`.
-Upload artifact: `dist/chatgpt/personal-website-contact-0.2.1.zip`.
+Upload artifact: `dist/chatgpt/personal-website-contact-0.2.2.zip`.
 
 The display name is **Andrei Tazetdinov Assistant**. The package and MCP server
 identifier remain `personal-website-contact` to preserve the existing identity;
 Runtime release `0.2.0` adds the public profile tool; package `0.2.1` clarifies
-the listing purpose and selects the Communication category. Reconnect or refresh existing custom
+the listing purpose and selects the Communication category. Package `0.2.2` adds
+the actual demonstration recording to the review metadata. Reconnect or refresh existing custom
 MCP connections after deploying to discover both tools and the new instructions.
 
 The ZIP contains root `plugin.json`, root `mcp.json`, and two existing website
@@ -61,8 +62,11 @@ under its default policy. Always connect directly to the canonical `www` URL.
    lookup with source links and without requesting email, tool selection,
    email collection, draft display, approval, sending, result, and inbox receipt.
    Also demonstrate declining to send. Hide private inbox content and credentials.
-   Enter the real video URL in the portal. It is deliberately omitted from the ZIP
-   until a recording exists. No fake evidence or placeholder video is included.
+   Package `0.2.2` includes the actual recording URL:
+   `https://www.andreitazetdinov.com/review/andrei-assistant-demo.mp4`.
+   Confirm that the deployed video opens before submitting. The current recording
+   shows the draft, email, approval and successful tool result; it does not show
+   an inbox receipt or a separate decline scenario.
 8. Complete any remaining portal fields and policy attestations. Submit for review.
    After approval, explicitly select **Publish plugin**. Then confirm discovery
    using the exact listing name **Andrei Tazetdinov Assistant** or its directory URL.
@@ -90,8 +94,8 @@ assessment. The category finding is separate from the review-information finding
 For **Incomplete review information**, open **Metadata & Skills → Review
 information → Review details**. Confirm the imported five positive and three
 negative cases, inspect the required fields and connection/domain status, and add
-a real reviewer-accessible demo video URL. The ZIP deliberately omits the video
-URL until a recording exists. The finding text alone does not identify every
+a real reviewer-accessible demo video URL. Package `0.2.2` now provides that URL;
+re-upload it to import the recording metadata. The finding text alone does not identify every
 missing field, so check the portal rather than assuming the video is the only one.
 
 A simple demo sequence:

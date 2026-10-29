@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "personal-website-contact",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "View Andrei Tazetdinov's professional profile and send him a reviewed email inquiry about consulting, software architecture, React Native, speaking, or collaboration.",
   "author": {
     "name": "Andrei Tazetdinov",
@@ -90,10 +90,11 @@
           ]
         },
         "commerce": false,
-        "commerce_description": "The plugin reads a public profile and sends professional inquiries. It does not sell services, take payments, or confirm bookings."
+        "commerce_description": "The plugin reads a public profile and sends professional inquiries. It does not sell services, take payments, or confirm bookings.",
+        "demo_recording_url": "https://www.andreitazetdinov.com/review/andrei-assistant-demo.mp4"
       },
       "publication": {
-        "release_notes": "Clarifies the profile and email contact purpose and selects Communication as the listing category. Tools and contact approval behavior are unchanged."
+        "release_notes": "Adds a reviewer-accessible demonstration video showing the profile conversation, inquiry draft, sender email, explicit approval and successful submission result. Retains the Communication category and existing tools."
       }
     }
   }

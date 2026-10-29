@@ -26,6 +26,9 @@
 /__dump/
 /dist/chatgpt/
 
+# Original screen recordings; the published demo lives in public/review
+/Запись экрана*.mov
+
 # debug
 npm-debug.log*
 yarn-debug.log*
