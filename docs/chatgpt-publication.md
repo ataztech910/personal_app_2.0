@@ -1,11 +1,12 @@
 # Publish Andrei Tazetdinov Assistant
 
 Package source: `chatgpt-plugin/`. Build with `npm run package:chatgpt`.
-Upload artifact: `dist/chatgpt/personal-website-contact-0.2.0.zip`.
+Upload artifact: `dist/chatgpt/personal-website-contact-0.2.1.zip`.
 
 The display name is **Andrei Tazetdinov Assistant**. The package and MCP server
 identifier remain `personal-website-contact` to preserve the existing identity;
-release `0.2.0` adds the public profile tool. Reconnect or refresh existing custom
+Runtime release `0.2.0` adds the public profile tool; package `0.2.1` clarifies
+the listing purpose and selects the Communication category. Reconnect or refresh existing custom
 MCP connections after deploying to discover both tools and the new instructions.
 
 The ZIP contains root `plugin.json`, root `mcp.json`, and two existing website
@@ -75,8 +76,41 @@ existing POC approval model: ChatGPT asks for consent; the backend does not have
 a separate server-verified approval token. Shared rate limiting and stronger abuse
 protection remain future improvements, as described in `chatgpt-contact.md`.
 
+## Addressing the initial portal findings
+
+Package `0.2.1` changes the listing category from Productivity to Communication
+and explains that the main purpose is reading one professional's public profile
+and contacting that person by email. Communication is a supported category in
+the official submission error reference. This is a better semantic fit, not a
+guarantee that the automated category assessment will pass.
+
+Upload the new ZIP **to the existing plugin**, then inspect the new metadata
+assessment. The category finding is separate from the review-information finding.
+
+For **Incomplete review information**, open **Metadata & Skills → Review
+information → Review details**. Confirm the imported five positive and three
+negative cases, inspect the required fields and connection/domain status, and add
+a real reviewer-accessible demo video URL. The ZIP deliberately omits the video
+URL until a recording exists. The finding text alone does not identify every
+missing field, so check the portal rather than assuming the video is the only one.
+
+A simple demo sequence:
+
+1. Open a new ChatGPT conversation with the custom plugin enabled.
+2. Ask who Andrei is; show `get_profile`, source links, and no request for email.
+3. Ask to draft a React Native consulting inquiry; provide your own email.
+4. Show the subject, email and full draft, then approve sending.
+5. Show the successful tool result and the receipt in your email inbox.
+6. Start another draft and decline sending; show that no send tool is invoked.
+
+Keep the screen recording accessible to reviewers and hide unrelated personal
+mail. In the portal, mark the service as requiring no authentication; do not
+invent reviewer credentials. If a field is managed by the ZIP, change its package
+metadata and re-upload rather than expecting portal edits to override the ZIP.
+
 ## Official references
 
 - Package format: https://developers.openai.com/plugins/build/plugins
 - Submission and domain verification: https://developers.openai.com/plugins/deploy/submission
 - Review and discovery: https://developers.openai.com/plugins/deploy/app-review
+- Supported categories and package errors: https://developers.openai.com/plugins/deploy/submission-errors

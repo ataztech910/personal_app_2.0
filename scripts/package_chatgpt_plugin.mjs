@@ -64,3 +64,6 @@ copyFileSync(zip, resolve(output, "personal-website-contact.zip"));
 console.log(`Package checks passed. Created ${zip}`);
 console.log("ZIP contains only manifest, MCP config and two existing website icons.");
 console.log("Portal validation is still required. Record the demo and verify the domain before submitting.");
+if (!extension.review.demo_recording_url) {
+  console.log("Draft upload only: required review.demo_recording_url is not set. Add a real reviewer-accessible video in the portal before submitting.");
+}

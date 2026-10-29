@@ -1,8 +1,8 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "personal-website-contact",
-  "version": "0.2.0",
-  "description": "Connect with Andrei Tazetdinov, software architect and React Native consultant. Ask about consulting, software architecture, technical speaking engagements, and professional collaboration.",
+  "version": "0.2.1",
+  "description": "View Andrei Tazetdinov's professional profile and send him a reviewed email inquiry about consulting, software architecture, React Native, speaking, or collaboration.",
   "author": {
     "name": "Andrei Tazetdinov",
     "url": "https://www.andreitazetdinov.com"
@@ -19,10 +19,10 @@
     "com.openai": {
       "interface": {
         "displayName": "Andrei Tazetdinov Assistant",
-        "shortDescription": "Profile, consulting & contact",
-        "longDescription": "Connect with Andrei Tazetdinov, software architect and React Native consultant. Ask about consulting, software architecture, technical speaking engagements, and professional collaboration. Read his published professional profile, specializations, conference talks and books without providing contact details. To send an inquiry, provide your email, review the drafted subject and full message, and approve sending. The website sends your message to Andrei and a receipt to you through Resend. Replies arrive by email, not inside ChatGPT. No website account is required. Messages do not subscribe you to a newsletter. The assistant cannot read private correspondence, quote live prices or availability, book meetings, or process payments.",
+        "shortDescription": "Contact Andrei about work",
+        "longDescription": "A professional profile and contact app for reaching Andrei Tazetdinov, software architect and React Native consultant. Prospective clients, collaborators, and event organizers can review his published background, specializations, talks, and books, then compose a consulting inquiry or speaking invitation. Profile lookup requires no email and sends no message. To contact Andrei, provide your email, review the subject and full message, and explicitly approve sending. The website delivers the inquiry to Andrei through Resend and sends a receipt to your email. Replies arrive by email, not in ChatGPT. No website account is required and sending does not subscribe you to a newsletter. The app is limited to Andrei's public profile and contact workflow; it does not perform software engineering work, provide a general-purpose assistant, read private correspondence, quote live prices or availability, book meetings, or process payments.",
         "developerName": "Andrei Tazetdinov",
-        "category": "Productivity",
+        "category": "Communication",
         "capabilities": [
           "Read public professional profile",
           "Explore consulting and speaking topics",
@@ -93,7 +93,7 @@
         "commerce_description": "The plugin reads a public profile and sends professional inquiries. It does not sell services, take payments, or confirm bookings."
       },
       "publication": {
-        "release_notes": "Adds the read-only get_profile tool using the website's published resume, consulting information and source links. Renames the listing to Andrei Tazetdinov Assistant. Contact email and draft approval remain required for sending."
+        "release_notes": "Clarifies the profile and email contact purpose and selects Communication as the listing category. Tools and contact approval behavior are unchanged."
       }
     }
   }
