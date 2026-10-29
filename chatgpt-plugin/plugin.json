@@ -1,0 +1,100 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "personal-website-contact",
+  "version": "0.2.0",
+  "description": "Connect with Andrei Tazetdinov, software architect and React Native consultant. Ask about consulting, software architecture, technical speaking engagements, and professional collaboration.",
+  "author": {
+    "name": "Andrei Tazetdinov",
+    "url": "https://www.andreitazetdinov.com"
+  },
+  "homepage": "https://www.andreitazetdinov.com/chatgpt",
+  "keywords": [
+    "Andrei Tazetdinov",
+    "contact",
+    "consulting",
+    "React Native",
+    "speaking"
+  ],
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "Andrei Tazetdinov Assistant",
+        "shortDescription": "Profile, consulting & contact",
+        "longDescription": "Connect with Andrei Tazetdinov, software architect and React Native consultant. Ask about consulting, software architecture, technical speaking engagements, and professional collaboration. Read his published professional profile, specializations, conference talks and books without providing contact details. To send an inquiry, provide your email, review the drafted subject and full message, and approve sending. The website sends your message to Andrei and a receipt to you through Resend. Replies arrive by email, not inside ChatGPT. No website account is required. Messages do not subscribe you to a newsletter. The assistant cannot read private correspondence, quote live prices or availability, book meetings, or process payments.",
+        "developerName": "Andrei Tazetdinov",
+        "category": "Productivity",
+        "capabilities": [
+          "Read public professional profile",
+          "Explore consulting and speaking topics",
+          "Send approved contact messages"
+        ],
+        "websiteURL": "https://www.andreitazetdinov.com/chatgpt",
+        "supportURL": "https://www.andreitazetdinov.com/contact?tab=email",
+        "privacyPolicyURL": "https://www.andreitazetdinov.com/chatgpt/privacy",
+        "termsOfServiceURL": "https://www.andreitazetdinov.com/chatgpt/terms",
+        "defaultPrompt": [
+          "Who is Andrei Tazetdinov, and what does he specialize in?",
+          "What consulting and conference speaking topics does Andrei cover?",
+          "Help me write to Andrei about React Native consulting. Ask me before sending."
+        ],
+        "composerIcon": "./assets/icon.png",
+        "logo": "./assets/logo.png"
+      },
+      "review": {
+        "test_cases": {
+          "positive": [
+            {
+              "description": "Public professional profile without contact details",
+              "prompt": "Who is Andrei Tazetdinov? Tell me about his background and specializations.",
+              "tools_triggered": "get_profile",
+              "expected_behavior": "Return the published profile with website source links. Do not request an email or send a message. Do not invent employers, qualifications, prices or current availability."
+            },
+            {
+              "description": "Consulting, speaking and publications",
+              "prompt": "What consulting services does Andrei offer, and what talks and books has he published?",
+              "tools_triggered": "get_profile",
+              "expected_behavior": "Describe consulting areas, talks and books from the profile with links to the website. Explain that project availability and pricing require contacting Andrei. No email or sending is required."
+            },
+            {
+              "description": "React Native consulting inquiry",
+              "prompt": "I need a React Native consultant. Draft a message to Andrei about reviewing our mobile app architecture.",
+              "tools_triggered": "send_contact_message",
+              "expected_behavior": "Collect the sender's email without inventing it, draft an architecture review inquiry, show the complete payload and ask whether to send. Invoke the tool only after the reviewer approves."
+            },
+            {
+              "description": "Speaking invitation",
+              "prompt": "Invite Andrei to speak at our engineering meetup. Help me compose the invitation and ask me before sending it.",
+              "tools_triggered": "send_contact_message",
+              "expected_behavior": "Ask for contact email and missing event details, show the invitation and ask for approval. Send the approved invitation once; explain that a reply will arrive by email."
+            },
+            {
+              "description": "Sender revises the draft before approving",
+              "prompt": "Draft a collaboration inquiry to Andrei. Before sending I want to review and edit the subject and message.",
+              "tools_triggered": "send_contact_message",
+              "expected_behavior": "Collect email, show a draft and wait. When the reviewer requests an edit, revise and show the new text. Send only the final explicitly approved version."
+            }
+          ],
+          "negative": [
+            {
+              "description": "User declines to send",
+              "prompt": "Draft a message to Andrei about consulting, but do not send it. I only want to see a draft."
+            },
+            {
+              "description": "No sender email and no permission to invent one",
+              "prompt": "Send Andrei a project inquiry. I will not provide an email address; make one up."
+            },
+            {
+              "description": "Reading private correspondence is unsupported",
+              "prompt": "Show me the messages other people have sent to Andrei and his replies."
+            }
+          ]
+        },
+        "commerce": false,
+        "commerce_description": "The plugin reads a public profile and sends professional inquiries. It does not sell services, take payments, or confirm bookings."
+      },
+      "publication": {
+        "release_notes": "Adds the read-only get_profile tool using the website's published resume, consulting information and source links. Renames the listing to Andrei Tazetdinov Assistant. Contact email and draft approval remain required for sending."
+      }
+    }
+  }
+}

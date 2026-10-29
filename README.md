@@ -4,6 +4,8 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 For the ChatGPT contact app (MCP endpoint, setup and testing), see
 [docs/chatgpt-contact.md](docs/chatgpt-contact.md).
+Build the public submission ZIP with `npm run package:chatgpt`; see
+[docs/chatgpt-publication.md](docs/chatgpt-publication.md) for the remaining portal steps.
 
 First, run the development server:
 

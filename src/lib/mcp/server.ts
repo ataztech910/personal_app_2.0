@@ -1,11 +1,27 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { z } from "zod";
 import { contactInput, contactOutput, createContactSender } from "./contact";
+import { getPublicProfile, profileOutput } from "./profile";
 
 const sendContact = createContactSender();
 
 export function createContactServer(send = sendContact) {
-  const server = new McpServer({ name: "personal-website-contact", version: "0.1.0" }, {
-    instructions: "Contact Andrei Tazetdinov about software engineering, consulting, or speaking. Ask the user for their email if missing. Show the email, subject and complete drafted message, then ask whether to send. Call send_contact_message only after explicit approval. Never invent contact details. This sends a one-way email, not a live chat; replies arrive at the supplied email. Do not subscribe the user to newsletters.",
+  const server = new McpServer({ name: "personal-website-contact", title: "Andrei Tazetdinov Assistant", version: "0.2.0" }, {
+    instructions: "Use get_profile for Andrei's public experience, specializations, consulting, talks and books; it needs no email and sends nothing. Do not invent biography, rates or availability. For contact, ask for the user's email, show the email, subject and full draft, then ask whether to send. Call send_contact_message only after explicit approval. Never invent contact details. Replies arrive by email, not in ChatGPT. No newsletter subscription.",
+  });
+  server.registerTool("get_profile", {
+    title: "Get Andrei's public profile",
+    description: "Use when the user asks who Andrei Tazetdinov is, about his experience, specialties, React Native or software architecture consulting, conference talks, books, or professional collaboration. Returns the published website profile and source links. No sender email is needed and no message is sent. Does not provide live availability, prices, private correspondence or unlisted biography details.",
+    inputSchema: z.object({}).strict(),
+    outputSchema: profileOutput,
+    annotations: { readOnlyHint: true, destructiveHint: false, openWorldHint: false, idempotentHint: true },
+    _meta: { securitySchemes: [{ type: "noauth" }] },
+  }, async () => {
+    const profile = getPublicProfile();
+    return {
+      structuredContent: profile,
+      content: [{ type: "text", text: JSON.stringify(profile) }],
+    };
   });
   server.registerTool("send_contact_message", {
     title: "Send a message to Andrei",

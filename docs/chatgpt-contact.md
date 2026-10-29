@@ -1,22 +1,32 @@
-# Personal Website Contact — ChatGPT POC
+# Andrei Tazetdinov Assistant — ChatGPT POC
 
-Connect this site's MCP server to ChatGPT as a custom app/plugin. ChatGPT collects
+Connect this site's MCP server to ChatGPT as a custom app/plugin. `get_profile`
+returns public experience, specializations, consulting, talks and books from the
+same resume data displayed by `/resume`, with website source links. Profile lookup
+needs no sender email and sends nothing. ChatGPT collects
 the sender's email, drafts a professional inquiry to Andrei Tazetdinov, shows the
 email, subject and complete message, asks for approval, then sends it through the
 same Resend delivery function as the website's email form.
 
-## Endpoint and tool
+## Endpoint and tools
 
 - Local: `http://localhost:3000/api/mcp`
-- Production after deploying this branch: `https://<your-site-domain>/api/mcp`
+- Production: `https://www.andreitazetdinov.com/api/mcp` (use `www` directly; avoid redirects)
 - Transport: stateless MCP Streamable HTTP, JSON responses; Node.js runtime.
-- App name: **Personal Website Contact**
-- Description: **Contact Andrei Tazetdinov about software engineering, React
-  Native consulting, speaking engagements, or other professional inquiries.**
-- Tool: `send_contact_message`
+- App name: **Andrei Tazetdinov Assistant**
+- Description: **Connect with Andrei Tazetdinov, software architect and React
+  Native consultant. Ask about consulting, software architecture, technical
+  speaking engagements, and professional collaboration.**
+- Tools: `get_profile` (read-only) and `send_contact_message` (write)
 - Authentication: none. Recipient is fixed by server configuration.
 
-Input JSON Schema (the MCP SDK advertises the equivalent schema):
+`get_profile` takes an empty strict object (`{}`); unknown arguments are rejected.
+It returns name, title, summary, location, languages, specializations, consulting,
+talks, books, projects, source links, contact instructions and limitations. It is
+read-only and idempotent and does not use private environment variables. Prices
+and current availability are deliberately not returned.
+
+Input JSON Schema for `send_contact_message` (the MCP SDK advertises the equivalent schema):
 
 ```json
 {
@@ -98,10 +108,12 @@ Account/workspace policies determine whether custom MCP connections are availabl
 2. Enter the app name and description above.
 3. Choose a public URL and enter the full HTTPS URL including `/api/mcp`.
 4. Choose **No authentication**, review the connection notice, and create the
-   plugin/app. Inspect the discovered `send_contact_message` tool.
+   plugin/app. Inspect the discovered `get_profile` and `send_contact_message` tools.
 5. Install/enable the resulting plugin and start a new conversation. Type `@` and
-   select **Personal Website Contact**.
-6. Ask: «Напиши Андрею насчёт консультации по React Native».
+   select **Andrei Tazetdinov Assistant**.
+6. First ask «Чем занимается Андрей и о чём выступает?» and verify profile lookup
+   returns public information and links without requesting email or sending.
+   Then ask: «Напиши Андрею насчёт консультации по React Native».
 7. Verify ChatGPT asks for your email, shows the email/subject/full draft, and asks
    whether to send. Approve only after checking the draft and any host permission
    prompt. Verify the tool result, owner inbox and sender receipt.
@@ -110,7 +122,8 @@ Account/workspace policies determine whether custom MCP connections are availabl
 
 If schemas or instructions change, refresh/reconnect the MCP app so ChatGPT
 discovers the current tool definitions. This is a private testing connection;
-public directory submission is a separate step.
+public directory submission is a separate step. The prepared submission package
+and remaining portal steps are documented in [chatgpt-publication.md](chatgpt-publication.md).
 
 ## POC limitations
 
@@ -139,7 +152,8 @@ public directory submission is a separate step.
 ## Code map
 
 - `src/app/api/mcp/route.ts`: bounded HTTP input, origin validation, MCP transport.
-- `src/lib/mcp/server.ts`: metadata, instructions and the single tool registration.
+- `src/lib/mcp/server.ts`: metadata, instructions and both tool registrations.
+- `src/lib/mcp/profile.ts`: public profile, reusing `src/lib/resume-data.ts`.
 - `src/lib/mcp/contact.ts`: schema, basic rate limits and duplicate coalescing.
 - `src/lib/contact.ts`: delivery shared with the existing contact form.
 - `src/lib/mail.ts`: existing Resend client, optional idempotency key and timeout.

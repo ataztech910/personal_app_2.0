@@ -24,15 +24,44 @@ describe("POST /api/mcp", () => {
     expect(mocks.deliver).not.toHaveBeenCalled();
   });
 
-  it("discovers only the contact tool, required email and write annotations", async () => {
+  it("discovers the profile and contact tools with separate permissions", async () => {
     const response = await rpc("tools/list");
     const { result } = await response.json();
-    expect(result.tools).toHaveLength(1);
-    const tool = result.tools[0];
+    expect(result.tools).toHaveLength(2);
+    const profile = result.tools.find((tool: { name: string }) => tool.name === "get_profile");
+    expect(profile.annotations).toMatchObject({ readOnlyHint: true, destructiveHint: false, openWorldHint: false, idempotentHint: true });
+    expect(profile.inputSchema.properties).toEqual({});
+    expect(profile.inputSchema.additionalProperties).toBe(false);
+    const tool = result.tools.find((tool: { name: string }) => tool.name === "send_contact_message");
     expect(tool.name).toBe("send_contact_message");
     expect(tool.inputSchema.required).toEqual(expect.arrayContaining(["email", "subject", "message"]));
     expect(tool.inputSchema.required).not.toContain("name");
     expect(tool.annotations).toMatchObject({ readOnlyHint: false, destructiveHint: true, openWorldHint: true });
+  });
+
+  it("returns the public profile without email, private config or any delivery", async () => {
+    vi.stubEnv("CONTACT_RECEIVER", "private-owner@example.com");
+    vi.stubEnv("RESEND_API_KEY", "private-test-key");
+    try {
+      const response = await rpc("tools/call", { name: "get_profile", arguments: {} });
+      const { result } = await response.json();
+      expect(result.isError).not.toBe(true);
+      expect(result.structuredContent).toMatchObject({ name: "Andrei Tazetdinov", contact: { tool: "send_contact_message" } });
+      expect(result.structuredContent.specializations).toEqual(expect.arrayContaining([expect.objectContaining({ description: expect.stringContaining("React Native") })]));
+      expect(result.structuredContent.talks.length).toBeGreaterThan(0);
+      expect(result.structuredContent.sources).toEqual(expect.arrayContaining([expect.objectContaining({ url: "https://www.andreitazetdinov.com/resume" })]));
+      expect(JSON.stringify(result)).not.toContain("private-owner@example.com");
+      expect(JSON.stringify(result)).not.toContain("private-test-key");
+      expect(mocks.deliver).not.toHaveBeenCalled();
+    } finally {
+      vi.unstubAllEnvs();
+    }
+  });
+
+  it("rejects unsupported arguments for profile lookup without sending", async () => {
+    const response = await rpc("tools/call", { name: "get_profile", arguments: { email: "not-needed@example.com" } });
+    expect((await response.json()).result.isError).toBe(true);
+    expect(mocks.deliver).not.toHaveBeenCalled();
   });
 
   it("invokes the tool and deduplicates a retry", async () => {

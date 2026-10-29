@@ -24,6 +24,7 @@
 .DS_Store
 *.pem
 /__dump/
+/dist/chatgpt/
 
 # debug
 npm-debug.log*
